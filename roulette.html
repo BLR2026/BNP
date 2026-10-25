@@ -6,17 +6,17 @@
     <title>Колесо Фортуны</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #050914;
+            background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050914 70%);
             color: #fff;
+            font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             overflow: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #050914 70%);
         }
         h1 {
             font-family: 'Unbounded', sans-serif;
@@ -26,49 +26,22 @@
             background: linear-gradient(to right, #fff, #38bdf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(56, 189, 248, 0.3));
         }
-        .wheel-container {
+        .wheel-wrapper {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 340px;
+            height: 340px;
             margin-bottom: 30px;
         }
-        .wheel {
+        canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 8px solid #1e293b;
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
-            /* 4 сектора по 90 градусов */
-            background: conic-gradient(
-                #6366f1 0deg 90deg, 
-                #0ea5e9 90deg 180deg, 
-                #10b981 180deg 270deg, 
-                #f59e0b 270deg 360deg
-            );
-            position: relative;
-            transition: transform 4s cubic-bezier(0.25, 0.1, 0.15, 1);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: rotate(0deg);
         }
-        /* Текст внутри колеса */
-        .wheel-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            font-weight: 800;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            transform-origin: 0 0;
-            white-space: nowrap;
-        }
-        /* Позиционирование текста */
-        .txt-1 { transform: rotate(45deg) translate(90px, -10px); }
-        .txt-2 { transform: rotate(135deg) translate(90px, -10px); }
-        .txt-3 { transform: rotate(225deg) translate(90px, -10px); }
-        .txt-4 { transform: rotate(315deg) translate(90px, -10px); }
-
-        /* Указатель */
         .pointer {
             position: absolute;
             top: -15px;
@@ -80,12 +53,10 @@
             border-right: 20px solid transparent;
             border-top: 40px solid #fff;
             z-index: 10;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
         }
-        
-        /* Центральная кнопка */
         .spin-btn {
-            padding: 15px 40px;
+            padding: 16px 50px;
             font-size: 1.2rem;
             font-weight: 800;
             color: #fff;
@@ -93,97 +64,151 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-family: 'Unbounded', sans-serif;
         }
-        .spin-btn:hover { transform: scale(1.05); box-shadow: 0 15px 25px rgba(16, 185, 129, 0.6); }
-        .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: scale(1); }
-
-        /* Результат */
+        .spin-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.6); }
+        .spin-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: scale(0.95); }
         .result {
             margin-top: 25px;
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.4rem;
+            font-weight: 700;
             text-align: center;
             opacity: 0;
             transition: opacity 0.5s ease, transform 0.5s ease;
-            transform: translateY(10px);
+            transform: translateY(15px);
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
         }
         .result.show { opacity: 1; transform: translateY(0); }
+        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; }
     </style>
 </head>
 <body>
 
     <h1>Крути и выигрывай!</h1>
     
-    <div class="wheel-container">
+    <div class="wheel-wrapper">
         <div class="pointer"></div>
-        <div class="wheel" id="wheel">
-            <!-- Секторы -->
-            <div class="wheel-text txt-1">Миксер</div>
-            <div class="wheel-text txt-2">Пылесос</div>
-            <div class="wheel-text txt-3">Колонка</div>
-            <div class="wheel-text txt-4">Ключи</div>
-        </div>
+        <canvas id="wheelCanvas" width="340" height="340"></canvas>
     </div>
 
-    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">Крутить</button>
+    <button class="spin-btn" id="spinBtn">Крутить</button>
     <div class="result" id="result"></div>
 
     <script>
-        let isSpinning = false;
-        let currentRotation = 0;
-        const prizes = ["Миксер", "Вертикальный пылесос", "Bluetooth колонка", "Набор ключей"];
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const btn = document.getElementById('spinBtn');
+        const resultEl = document.getElementById('result');
 
-        function spinWheel() {
+        const prizes = [
+            { label: "Миксер", color: "#6366f1" },
+            { label: "Вертикальный пылесос", color: "#0ea5e9" },
+            { label: "Bluetooth колонка", color: "#10b981" },
+            { label: "Набор инструментов", color: "#f59e0b" }
+        ];
+
+        const numSegments = prizes.length;
+        const arcSize = (2 * Math.PI) / numSegments;
+        let currentAngle = 0;
+        let isSpinning = false;
+
+        // Функция отрисовки колеса
+        function drawWheel() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = centerX - 10;
+
+            for (let i = 0; i < numSegments; i++) {
+                // Рисуем сектор
+                ctx.beginPath();
+                ctx.fillStyle = prizes[i].color;
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, i * arcSize, (i + 1) * arcSize);
+                ctx.fill();
+
+                // Разделительная линия
+                ctx.strokeStyle = "rgba(255,255,255,0.2)";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Рисуем текст
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(i * arcSize + arcSize / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 13px Inter, sans-serif";
+                ctx.shadowColor = "rgba(0,0,0,0.5)";
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+
+                // Разбиваем длинный текст на две строки
+                let text = prizes[i].label;
+                if (text.length > 12) {
+                    let words = text.split(' ');
+                    if (words.length > 1) {
+                        let mid = Math.ceil(words.length / 2);
+                        let line1 = words.slice(0, mid).join(' ');
+                        let line2 = words.slice(mid).join(' ');
+                        ctx.fillText(line1, radius - 15, -5);
+                        ctx.fillText(line2, radius - 15, 10);
+                    } else {
+                        ctx.fillText(text, radius - 15, 0);
+                    }
+                } else {
+                    ctx.fillText(text, radius - 15, 0);
+                }
+                ctx.restore();
+            }
+
+            // Внутренний ободок
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = "#1e293b";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+        }
+
+        // Первичная отрисовка
+        drawWheel();
+
+        // Логика вращения
+        btn.addEventListener('click', () => {
             if (isSpinning) return;
             isSpinning = true;
-            
-            const btn = document.getElementById('spinBtn');
-            const resultEl = document.getElementById('result');
-            const wheel = document.getElementById('wheel');
-            
             btn.disabled = true;
             resultEl.classList.remove('show');
 
-            // Выбираем случайный приз (0, 1, 2 или 3)
-            const randomIndex = Math.floor(Math.random() * 4);
-            
-            // Рассчитываем угол для остановки.
-            // Сектора: 
-            // 0 (Миксер): 0-90
-            // 1 (Пылесос): 90-180
-            // 2 (Колонка): 180-270
-            // 3 (Ключи): 270-360
-            // Мы добавляем 5 полных оборотов (1800 градусов) + угол для нужного сектора
-            const extraSpins = 1800;
-            
-            // Вычисляем целевой угол (чтобы указатель попал в середину сектора)
-            // Для 0 сектора это 45, для 1 это 135 и т.д.
-            // Но так как колесо крутится по часовой стрелке, нам нужно вычесть этот угол из 360.
-            let targetAngle = 0;
-            if (randomIndex === 0) targetAngle = 315; // 360 - 45
-            if (randomIndex === 1) targetAngle = 225; // 360 - 135
-            if (randomIndex === 2) targetAngle = 135; // 360 - 225
-            if (randomIndex === 3) targetAngle = 45;  // 360 - 315
+            // Выбираем случайный приз
+            const winningIndex = Math.floor(Math.random() * numSegments);
 
-            // Добавляем случайное отклонение внутри сектора (+/- 30 градусов), чтобы не всегда падало ровно в центр
-            const randomOffset = Math.floor(Math.random() * 60) - 30;
+            // Рассчитываем угол для остановки
+            // Указатель находится сверху (12 часов). 
+            // Нам нужно повернуть колесо так, чтобы центр выигрышного сектора оказался под указателем.
+            // Угол центра сектора: (winningIndex * 90) + 45.
+            // Так как указатель сверху, нам нужно сместить на -90 градусов.
+            const targetAngle = 360 - ((winningIndex * 90) + 45);
             
-            currentRotation += extraSpins + targetAngle + randomOffset;
+            // Добавляем 5 полных оборотов (1800 градусов) для эффекта
+            currentAngle += 1800 + targetAngle;
             
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            canvas.style.transform = `rotate(${currentAngle}deg)`;
 
-            // Ждем окончания анимации (4 секунды)
+            // Показываем результат через 4 секунды (длительность анимации)
             setTimeout(() => {
                 isSpinning = false;
                 btn.disabled = false;
-                resultEl.textContent = `Ваш приз: ${prizes[randomIndex]}! 🎉`;
+                resultEl.textContent = `Ваш приз: ${prizes[winningIndex].label}! 🎉`;
                 resultEl.classList.add('show');
             }, 4000);
-        }
+        });
     </script>
 </body>
 </html>
