@@ -35,6 +35,7 @@
             min-height: 100vh;
         }
 
+        /* --- Живой фон --- */
         .ambient-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -57,6 +58,7 @@
             100% { transform: translate(50px, 50px) scale(1.1); }
         }
 
+        /* --- Листопад --- */
         #falling-leaves {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0; overflow: hidden;
@@ -455,741 +457,189 @@
 </div>
 
 <script>
-    const catalogData = [
+    const rawCatalog = [
         {
             category: "Холодильники",
             products: [
-                { 
-                    name: "ATLANT МХМ 2835-08", 
-                    specs: "280 л • Капельная • Класс A • Высота 163 см", 
-                    price: 1015.00, oldPrice: 1421.00, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/2835/atlant_mxm_2835_08.jpg",
-                    fullSpecs: ["Общий объем: 280 л", "Система разморозки: капельная", "Класс энергопотребления: A", "Высота: 163 см", "Ширина: 60 см", "Глубина: 63 см", "Уровень шума: 41 дБ"],
-                    details: "Двухкамерный холодильник с верхней морозильной камерой. Механическое управление, перенавешиваемые двери.",
-                    advantage: "Классическая модель с надежной капельной системой. Компактная высота 163 см."
-                },
-                { 
-                    name: "Samsung RL50RRCSW1", 
-                    specs: "343 л • No Frost • Класс A+ • Высота 200 см", 
-                    price: 1899.00, oldPrice: 2658.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/rl50rrcsw1/samsung_rl50rrcsw1.jpg",
-                    fullSpecs: ["Общий объем: 343 л", "Система разморозки: No Frost", "Класс энергопотребления: A+", "Высота: 200 см", "Ширина: 59.5 см", "Глубина: 64.3 см", "Уровень шума: 41 дБ"],
-                    details: "Холодильник Samsung с системой Full No Frost, электронным управлением и зоной свежести.",
-                    advantage: "Большой объем и система No Frost избавляют от разморозки."
-                },
-                { 
-                    name: "LG GA-B489 BVCA", 
-                    specs: "359 л • No Frost • Класс A+ • Высота 200 см", 
-                    price: 2299.00, oldPrice: 3218.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/gab489bvca/lg_ga_b489_bvca.jpg",
-                    fullSpecs: ["Общий объем: 359 л", "Система разморозки: No Frost", "Класс энергопотребления: A+", "Высота: 200 см", "Ширина: 59.5 см", "Глубина: 68.5 см", "Инверторный компрессор: Да"],
-                    details: "Холодильник LG с инверторным компрессором, системой No Frost и технологией DoorCooling+.",
-                    advantage: "Инверторный компрессор с гарантией 10 лет и равномерное охлаждение."
-                }
+                { name: "Beko RCNK310E20VW", basePrice: 1549.00, specs: "Общий объем 310 л • No Frost • Класс A+", img: "https://www.beko.com/medias/1000-Wx1000-H-RCNK310E20VW-Product-Image-1.jpg", fullSpecs: ["Общий объем: 310 л", "Система разморозки: No Frost", "Класс энергопотребления: A+", "Высота: 184 см", "Ширина: 60 см"], advantage: "Надежная система No Frost и вместительный объем." },
+                { name: "Kraufen RF2-55N", basePrice: 2600.00, specs: "Объем 472 л • No Frost • Side-by-Side", img: "https://catalog.onliner.by/static/img/kraufen/rf2_55n/rf2_55n_1.jpg", fullSpecs: ["Общий объем: 472 л", "Тип: Side-by-Side", "Система разморозки: Полный No Frost", "Класс энергопотребления: A++", "Уровень шума: 43 дБ"], advantage: "Премиальный дизайн и огромный объем для большой семьи." },
+                { name: "Indesit ITS 5200 NG", basePrice: 1189.00, specs: "Объем 320 л • No Frost • Класс A+", img: "https://www.indesit.ru/medias/1000-Wx1000-H-ITS-5200-NG-Product-Image-1.jpg", fullSpecs: ["Общий объем: 320 л", "Система разморозки: No Frost", "Класс энергопотребления: A+", "Высота: 187 см"], advantage: "Доступная цена и классический дизайн." }
             ]
         },
         {
             category: "Стиральные машины",
             products: [
-                { 
-                    name: "Indesit IWSD 51051 CIS", 
-                    specs: "5 кг • Отжим 1000 об/мин • Глубина 42 см", 
-                    price: 820.26, oldPrice: 1148.36, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/iwsc51051/indesit_iwsd_51051_cis.jpg",
-                    fullSpecs: ["Загрузка: 5 кг", "Отжим: 1000 об/мин", "Класс энергопотребления: A", "Глубина: 42 см", "Количество программ: 13", "Ширина: 59.5 см", "Высота: 85 см"],
-                    details: "Узкая стиральная машина с 13 программами, быстрой стиркой и защитой от детей.",
-                    advantage: "Компактная глубина 42 см идеально подходит для малогабаритных квартир."
-                },
-                { 
-                    name: "Bosch WLL2426SOE", 
-                    specs: "7 кг • Отжим 1200 об/мин • EcoSilence Drive", 
-                    price: 1499.00, oldPrice: 2098.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/wll2426soe/bosch_wll2426soe.jpg",
-                    fullSpecs: ["Загрузка: 7 кг", "Отжим: 1200 об/мин", "Двигатель: EcoSilence Drive", "Класс энергопотребления: A+++", "Количество программ: 15", "Глубина: 44.6 см"],
-                    details: "Стиральная машина Bosch с инверторным двигателем, 15 программами и быстрой стиркой.",
-                    advantage: "Тихий и долговечный двигатель EcoSilence Drive с гарантией 10 лет."
-                },
-                { 
-                    name: "Samsung WW80R62LVFWDLP", 
-                    specs: "8 кг • Отжим 1200 об/мин • Eco Bubble", 
-                    price: 1799.00, oldPrice: 2518.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ww80r62lvfwdlp/samsung_ww80r62lvfwdlp.jpg",
-                    fullSpecs: ["Загрузка: 8 кг", "Отжим: 1200 об/мин", "Технология Eco Bubble", "Класс энергопотребления: A+++", "Количество программ: 14", "Глубина: 45 см"],
-                    details: "Стиральная машина Samsung с технологией Eco Bubble для бережной стирки в холодной воде.",
-                    advantage: "Eco Bubble активирует порошок в пену, обеспечивая эффективную стирку при низких температурах."
-                }
-            ]
-        },
-        {
-            category: "Смартфоны",
-            products: [
-                { 
-                    name: "Xiaomi Redmi 17 4G", 
-                    specs: "6.6\" 120 Гц • 4/128 ГБ • 50 Мп", 
-                    price: 599.00, oldPrice: 838.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/redmi17/xiaomi_redmi_17_4g.jpg",
-                    fullSpecs: ["Экран: 6.6\" IPS, 120 Гц", "Процессор: MediaTek Helio G91-Ultra", "Память: 4 ГБ ОЗУ / 128 ГБ", "Камера: 50 Мп", "Аккумулятор: 5000 мАч", "ОС: Android 16"],
-                    details: "Смартфон Xiaomi с экраном 120 Гц, камерой 50 Мп и аккумулятором 5000 мАч.",
-                    advantage: "Отличный бюджетный вариант с плавным экраном и емкой батареей."
-                },
-                { 
-                    name: "Samsung Galaxy A57 5G", 
-                    specs: "6.5\" AMOLED 120 Гц • 8/256 ГБ • 64 Мп", 
-                    price: 1299.00, oldPrice: 1818.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/a575g/samsung_galaxy_a57_5g.jpg",
-                    fullSpecs: ["Экран: 6.5\" Super AMOLED, 120 Гц", "Процессор: Exynos 1680", "Память: 8 ГБ / 256 ГБ", "Камера: 64 Мп", "Аккумулятор: 5000 мАч", "ОС: Android 16"],
-                    details: "Смартфон Samsung с AMOLED-экраном, процессором Exynos и поддержкой 5G.",
-                    advantage: "Яркий AMOLED-экран и поддержка 5G в среднем сегменте."
-                },
-                { 
-                    name: "Apple iPhone 15 Pro Max", 
-                    specs: "6.7\" Super Retina XDR • 256 ГБ • A17 Pro", 
-                    price: 3999.00, oldPrice: 5598.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/iphone15promax/apple_iphone_15_pro_max.jpg",
-                    fullSpecs: ["Экран: 6.7\" Super Retina XDR, 120 Гц", "Чип: A17 Pro", "Память: 256 ГБ", "Камера: 48 Мп + 12 Мп + 12 Мп", "Материал: Титан", "Разъем: USB-C"],
-                    details: "Флагманский iPhone с титановым корпусом, чипом A17 Pro и телеобъективом с 5-кратным зумом.",
-                    advantage: "Эталон производительности и видеосъемки."
-                }
-            ]
-        },
-        {
-            category: "Ноутбуки",
-            products: [
-                { 
-                    name: "Lenovo IdeaPad 3 Slim 15IAH8", 
-                    specs: "15.6\" IPS • Core i5 • 8/512 ГБ", 
-                    price: 2199.00, oldPrice: 3078.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ideapad3slim/lenovo_ideapad_3_slim_15iah8.jpg",
-                    fullSpecs: ["Экран: 15.6\" IPS, 1920x1080", "Процессор: Intel Core i5-12450H", "Память: 8 ГБ ОЗУ / 512 ГБ SSD", "Графика: Intel UHD Graphics", "ОС: без ОС", "Вес: 1.63 кг"],
-                    details: "Ноутбук Lenovo с процессором Core i5, 8 ГБ ОЗУ и быстрым SSD.",
-                    advantage: "Сбалансированное решение для учебы и офисной работы."
-                },
-                { 
-                    name: "ASUS VivoBook S15 OLED", 
-                    specs: "15.6\" OLED • Core i5 • 16/512 ГБ", 
-                    price: 3499.00, oldPrice: 4898.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/vivobooks15oled/asus_vivobook_s15_oled.jpg",
-                    fullSpecs: ["Экран: 15.6\" OLED, 2880x1620, 120 Гц", "Процессор: Intel Core i5-13500H", "Память: 16 ГБ / 512 ГБ SSD", "Графика: Intel Iris Xe", "ОС: Windows 11 Home", "Вес: 1.7 кг"],
-                    details: "Ноутбук ASUS с ярким OLED-экраном 120 Гц и процессором Core i5.",
-                    advantage: "OLED-экран с идеальным контрастом и высокой цветопередачей."
-                },
-                { 
-                    name: "Apple MacBook Air 15\" M4", 
-                    specs: "15.3\" Liquid Retina • M4 • 16/256 ГБ", 
-                    price: 5890.00, oldPrice: 8246.00, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/macbookair15m4/apple_macbook_air_15_m4.jpg",
-                    fullSpecs: ["Экран: 15.3\" Liquid Retina", "Чип: Apple M4", "Память: 16 ГБ / 256 ГБ SSD", "Автономность: до 18 часов", "Вес: 1.51 кг", "ОС: macOS"],
-                    details: "Ноутбук Apple MacBook Air 15 с чипом M4, большим экраном и длительной автономностью.",
-                    advantage: "Мощный и энергоэффективный чип M4, бесшумная работа."
-                }
-            ]
-        },
-        {
-            category: "Компьютеры",
-            products: [
-                { 
-                    name: "MultiOffice 5R34D32S256S96IMV24", 
-                    specs: "Ryzen 5 • 8 ГБ • 256 ГБ SSD • Монитор 24\"", 
-                    price: 2799.00, oldPrice: 3918.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/multioffice5r34/multioffice_5r34d32s256s96imv24.jpg",
-                    fullSpecs: ["Процессор: AMD Ryzen 5", "Память: 8 ГБ ОЗУ / 256 ГБ SSD", "Монитор: 24\" IPS", "ОС: Windows 11 Pro", "Периферия: Клавиатура и мышь"],
-                    details: "Готовый офисный компьютер с монитором 24 дюйма, клавиатурой и мышью.",
-                    advantage: "Готовое решение для офиса с предустановленной Windows 11 Pro."
-                },
-                { 
-                    name: "MultiGame 5C144FDV8H1S256G305MV24", 
-                    specs: "Core i5 • 16 ГБ • 256 ГБ SSD • RTX 3050", 
-                    price: 3599.00, oldPrice: 5038.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/multigame5c144/multigame_5c144fdv8h1s256g305mv24.jpg",
-                    fullSpecs: ["Процессор: Intel Core i5", "Память: 16 ГБ / 256 ГБ SSD", "Видеокарта: NVIDIA GeForce RTX 3050", "Монитор: 24\" 144 Гц", "ОС: Windows 11"],
-                    details: "Игровой компьютер с видеокартой RTX 3050 и монитором 144 Гц.",
-                    advantage: "Оптимальный игровой ПК для Full HD-гейминга."
-                },
-                { 
-                    name: "ZET Gaming WARD H116", 
-                    specs: "Ryzen 5 • 16 ГБ • 512 ГБ SSD • RTX 3060", 
-                    price: 4299.00, oldPrice: 6018.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/zetwardh116/zet_gaming_ward_h116.jpg",
-                    fullSpecs: ["Процессор: AMD Ryzen 5 5600", "Память: 16 ГБ / 512 ГБ SSD", "Видеокарта: RTX 3060 12 ГБ", "Блок питания: 650 Вт", "ОС: Windows 11"],
-                    details: "Мощный игровой компьютер с видеокартой RTX 3060 12 ГБ и процессором Ryzen 5.",
-                    advantage: "Видеокарта RTX 3060 с 12 ГБ памяти для современных игр."
-                }
-            ]
-        },
-        {
-            category: "Вертикальные пылесосы",
-            products: [
-                { 
-                    name: "Holt HT-VC-011", 
-                    specs: "600 Вт • Контейнер 0.8 л • Проводной", 
-                    price: 149.00, oldPrice: 208.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/htvc011/holt_ht_vc_011.jpg",
-                    fullSpecs: ["Мощность: 600 Вт", "Объем пылесборника: 0.8 л", "Тип: проводной", "Фильтрация: HEPA", "Вес: 2.2 кг"],
-                    details: "Вертикальный проводной пылесос Holt с контейнером 0.8 л и HEPA-фильтром.",
-                    advantage: "Доступный и мощный помощник для ежедневной уборки."
-                },
-                { 
-                    name: "Redmond RV-UR365", 
-                    specs: "150 Вт • Беспроводной • Контейнер 0.5 л", 
-                    price: 299.00, oldPrice: 418.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/rvur365/redmond_rv_ur365.jpg",
-                    fullSpecs: ["Мощность: 150 Вт", "Тип: беспроводной", "Объем пылесборника: 0.5 л", "Время работы: 40 мин", "Вес: 2.5 кг"],
-                    details: "Беспроводной вертикальный пылесос Redmond с временем работы 40 минут.",
-                    advantage: "Удобный беспроводной формат для быстрой уборки."
-                },
-                { 
-                    name: "Bosch BBS611MAT", 
-                    specs: "18 В • Беспроводной • 30 мин", 
-                    price: 549.00, oldPrice: 768.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/bbs611mat/bosch_bbs611mat.jpg",
-                    fullSpecs: ["Напряжение: 18 В", "Тип: беспроводной", "Время работы: 30 мин", "Объем контейнера: 0.3 л", "Вес: 2.3 кг"],
-                    details: "Вертикальный пылесос Bosch с литий-ионным аккумулятором 18 В.",
-                    advantage: "Надежность Bosch и удобство беспроводной уборки."
-                }
-            ]
-        },
-        {
-            category: "Роботы-пылесосы",
-            products: [
-                { 
-                    name: "Centek CT-2740", 
-                    specs: "2700 Па • Контейнер 0.35 л • Сухая уборка", 
-                    price: 199.00, oldPrice: 278.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ct2740/centek_ct_2740.jpg",
-                    fullSpecs: ["Сила всасывания: 2700 Па", "Объем пылесборника: 0.35 л", "Тип уборки: сухая", "Аккумулятор: 2000 мАч", "Время работы: 90 мин"],
-                    details: "Робот-пылесос Centek с силой всасывания 2700 Па и временем работы 90 минут.",
-                    advantage: "Отличный бюджетный робот для базовой сухой уборки."
-                },
-                { 
-                    name: "Dreame Bot Z10 Pro", 
-                    specs: "4000 Па • Автоочистка • Влажная уборка", 
-                    price: 899.00, oldPrice: 1258.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/z10pro/dreame_bot_z10_pro.jpg",
-                    fullSpecs: ["Всасывание: 4000 Па", "База: Автоочистка", "Уборка: сухая + влажная", "Навигация: LiDAR", "Аккумулятор: 5200 мАч"],
-                    details: "Робот-пылесос Dreame с базой автоочистки и влажной уборкой.",
-                    advantage: "База самоочистки и лидар для точной навигации."
-                },
-                { 
-                    name: "iClebo Omega", 
-                    specs: "Лидар • Влажная уборка • 600 мл", 
-                    price: 1299.00, oldPrice: 1818.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/omega/iclebo_omega.jpg",
-                    fullSpecs: ["Навигация: Лидар", "Уборка: сухая + влажная", "Объем пылесборника: 600 мл", "Аккумулятор: 5200 мАч", "Время работы: 120 мин"],
-                    details: "Робот-пылесос iClebo Omega с лидаром и влажной уборкой.",
-                    advantage: "Премиальная навигация и большая автономность."
-                }
-            ]
-        },
-        {
-            category: "Кофемашины",
-            products: [
-                { 
-                    name: "DeLonghi Magnifica S Smart ECAM250.33.TB", 
-                    specs: "Автоматическая • 15 бар • Кофемолка", 
-                    price: 1899.00, oldPrice: 2658.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ecam25033tb/delonghi_magnifica_s_smart.jpg",
-                    fullSpecs: ["Тип: автоматическая", "Давление: 15 бар", "Кофемолка: керамические жернова", "Объем бака: 1.8 л", "Капучинатор: ручной"],
-                    details: "Автоматическая кофемашина DeLonghi с керамической кофемолкой.",
-                    advantage: "Надежная автоматическая кофемашина для дома."
-                },
-                { 
-                    name: "DeLonghi Dinamica ECAM350.75.S", 
-                    specs: "Автоматическая • 15 бар • Авто-капучинатор", 
-                    price: 3802.00, oldPrice: 5322.80, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ecam35075s/delonghi_dinamica.jpg",
-                    fullSpecs: ["Тип: автоматическая", "Давление: 15 бар", "Капучинатор: автоматический", "Объем бака: 1.8 л", "Количество напитков: 2"],
-                    details: "Кофемашина DeLonghi Dinamica с автоматическим капучинатором.",
-                    advantage: "Автоматическое приготовление капучино и латте."
-                },
-                { 
-                    name: "DeLonghi Eletta Explore ECAM450.86.T", 
-                    specs: "Автоматическая • 15 бар • 40+ напитков", 
-                    price: 3571.00, oldPrice: 4999.40, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ecam45086t/delonghi_eletta_explore.jpg",
-                    fullSpecs: ["Тип: автоматическая", "Давление: 15 бар", "Количество напитков: 40+", "Капучинатор: автоматический", "Управление: сенсорный дисплей"],
-                    details: "Флагманская кофемашина DeLonghi Eletta Explore с 40+ напитками.",
-                    advantage: "Огромный выбор напитков и сенсорное управление."
-                }
-            ]
-        },
-        {
-            category: "Плиты",
-            products: [
-                { 
-                    name: "GEFEST 6101-02 К", 
-                    specs: "Газовая • 4 конфорки • Духовка 52 л", 
-                    price: 699.00, oldPrice: 978.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/610102k/gefest_6101_02_k.jpg",
-                    fullSpecs: ["Тип: газовая", "Конфорки: 4", "Объем духовки: 52 л", "Управление: механическое", "Газ-контроль: да"],
-                    details: "Газовая плита GEFEST с 4 конфорками и духовкой 52 л.",
-                    advantage: "Классическая газовая плита с газ-контролем."
-                },
-                { 
-                    name: "GEFEST 6500-02 0114", 
-                    specs: "Газовая • 4 конфорки • Духовка 52 л", 
-                    price: 899.00, oldPrice: 1258.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/650002114/gefest_6500_02_0114.jpg",
-                    fullSpecs: ["Тип: газовая", "Конфорки: 4", "Объем духовки: 52 л", "Управление: механическое", "Электроподжиг: да"],
-                    details: "Газовая плита GEFEST с электроподжигом и духовкой 52 л.",
-                    advantage: "Удобный электроподжиг и надежная конструкция."
-                },
-                { 
-                    name: "GEFEST 1200 С7 К19", 
-                    specs: "Газовая • 4 конфорки • Духовка 65 л", 
-                    price: 1099.00, oldPrice: 1538.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/1200s7k19/gefest_1200_s7_k19.jpg",
-                    fullSpecs: ["Тип: газовая", "Конфорки: 4", "Объем духовки: 65 л", "Управление: механическое", "Гриль: да"],
-                    details: "Газовая плита GEFEST с духовкой 65 л и грилем.",
-                    advantage: "Большая духовка и функция гриля."
-                }
-            ]
-        },
-        {
-            category: "Вытяжки",
-            products: [
-                { 
-                    name: "Akpo Soft 60 WK-5", 
-                    specs: "Купольная • 520 м³/ч • Ширина 60 см", 
-                    price: 179.00, oldPrice: 250.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/soft60wk5/akpo_soft_60_wk_5.jpg",
-                    fullSpecs: ["Тип: купольная", "Производительность: 520 м³/ч", "Ширина: 60 см", "Управление: механическое", "Материал: сталь"],
-                    details: "Купольная вытяжка Akpo с производительностью 520 м³/ч.",
-                    advantage: "Доступная купольная вытяжка для небольшой кухни."
-                },
-                { 
-                    name: "Backer QD60A-G6L200", 
-                    specs: "Купольная • 900 м³/ч • Ширина 59.5 см", 
-                    price: 399.00, oldPrice: 558.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/qd60ag6l200/backer_qd60a_g6l200.jpg",
-                    fullSpecs: ["Тип: купольная", "Производительность: 900 м³/ч", "Ширина: 59.5 см", "Управление: электронное", "Материал: стекло/сталь"],
-                    details: "Купольная вытяжка Backer с производительностью 900 м³/ч.",
-                    advantage: "Высокая производительность и современный дизайн."
-                },
-                { 
-                    name: "Elica ANTARTICA SOFT IX A 100x70", 
-                    specs: "Купольная • 1200 м³/ч • Ширина 100 см", 
-                    price: 899.00, oldPrice: 1258.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/antartica/elica_antartica.jpg",
-                    fullSpecs: ["Тип: купольная", "Производительность: 1200 м³/ч", "Ширина: 100 см", "Управление: электронное", "Материал: нержавеющая сталь"],
-                    details: "Купольная вытяжка Elica с производительностью 1200 м³/ч.",
-                    advantage: "Мощная и широкая вытяжка для больших кухонь."
-                }
-            ]
-        },
-        {
-            category: "Bluetooth колонки",
-            products: [
-                { 
-                    name: "JBL Clip 4", 
-                    specs: "5 Вт • IP67 • 10 ч работы", 
-                    price: 252.00, oldPrice: 352.80, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/clip4/jbl_clip_4.jpg",
-                    fullSpecs: ["Мощность: 5 Вт", "Защита: IP67", "Время работы: 10 ч", "Bluetooth: 5.1", "Вес: 239 г"],
-                    details: "Портативная колонка JBL Clip 4 с карабином и защитой IP67.",
-                    advantage: "Компактная и защищенная колонка для улицы."
-                },
-                { 
-                    name: "JBL Pulse 2", 
-                    specs: "16 Вт • Подсветка • 10 ч", 
-                    price: 499.00, oldPrice: 698.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/pulse2/jbl_pulse_2.jpg",
-                    fullSpecs: ["Мощность: 16 Вт", "Подсветка: LED", "Время работы: 10 ч", "Bluetooth: 4.1", "Вес: 770 г"],
-                    details: "Колонка JBL Pulse 2 с эффектной LED-подсветкой.",
-                    advantage: "Яркая подсветка, синхронизирующаяся с музыкой."
-                },
-                { 
-                    name: "JBL PartyBox 310", 
-                    specs: "240 Вт • Караоке • Подсветка", 
-                    price: 1299.00, oldPrice: 1818.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/partybox310/jbl_partybox_310.jpg",
-                    fullSpecs: ["Мощность: 240 Вт", "Функции: караоке, подсветка", "Время работы: 18 ч", "Bluetooth: 5.1", "Вес: 17 кг"],
-                    details: "Мощная вечериночная колонка JBL PartyBox 310 с караоке.",
-                    advantage: "Огромная мощность и световые эффекты для вечеринок."
-                }
-            ]
-        },
-        {
-            category: "Телевизоры",
-            products: [
-                { 
-                    name: "Xiaomi TV A Pro 32\"", 
-                    specs: "32\" HD • Android TV • Wi-Fi", 
-                    price: 499.00, oldPrice: 698.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/tvap32/xiaomi_tv_a_pro_32.jpg",
-                    fullSpecs: ["Диагональ: 32\"", "Разрешение: HD", "ОС: Android TV", "Wi-Fi: да", "Частота: 60 Гц"],
-                    details: "Смарт-телевизор Xiaomi 32 дюйма с Android TV.",
-                    advantage: "Доступный умный телевизор для кухни или спальни."
-                },
-                { 
-                    name: "Samsung UE32T4500AUXRU", 
-                    specs: "32\" HD • Smart TV • HDMI", 
-                    price: 699.00, oldPrice: 978.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ue32t4500/samsung_ue32t4500.jpg",
-                    fullSpecs: ["Диагональ: 32\"", "Разрешение: HD", "Smart TV: Tizen", "HDMI: 2", "Частота: 50 Гц"],
-                    details: "Телевизор Samsung 32 дюйма со Smart TV на Tizen.",
-                    advantage: "Надежный бренд и удобная система Tizen."
-                },
-                { 
-                    name: "LG 32LQ63506LA", 
-                    specs: "32\" Full HD • Smart TV • HDR", 
-                    price: 899.00, oldPrice: 1258.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/32lq63506la/lg_32lq63506la.jpg",
-                    fullSpecs: ["Диагональ: 32\"", "Разрешение: Full HD", "Smart TV: webOS", "HDR: да", "Частота: 60 Гц"],
-                    details: "Телевизор LG 32 дюйма с Full HD и Smart TV webOS.",
-                    advantage: "Full HD разрешение и удобная система webOS."
-                }
-            ]
-        },
-        {
-            category: "Яндекс Станции",
-            products: [
-                { 
-                    name: "Яндекс Станция Лайт", 
-                    specs: "5 Вт • Алиса • Zigbee", 
-                    price: 399.00, oldPrice: 558.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/stationlite/yandex_station_lite.jpg",
-                    fullSpecs: ["Мощность: 5 Вт", "Ассистент: Алиса", "Хаб: Zigbee", "Подключение: Wi-Fi, Bluetooth"],
-                    details: "Умная колонка Яндекс Станция Лайт с Алисой и Zigbee.",
-                    advantage: "Доступный вход в экосистему умного дома Яндекса."
-                },
-                { 
-                    name: "Яндекс Станция 3", 
-                    specs: "30 Вт • Алиса • Zigbee", 
-                    price: 799.00, oldPrice: 1118.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/station3/yandex_station_3.jpg",
-                    fullSpecs: ["Мощность: 30 Вт", "Ассистент: Алиса", "Хаб: Zigbee", "Подключение: Wi-Fi, Bluetooth 5.0"],
-                    details: "Умная колонка Яндекс Станция 3 с мощным звуком и Zigbee.",
-                    advantage: "Более мощный звук и управление умным домом."
-                },
-                { 
-                    name: "Яндекс Станция Дуо Макс", 
-                    specs: "10.5\" экран • 60 Вт • Камера", 
-                    price: 1999.00, oldPrice: 2798.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/duomax/yandex_station_duo_max.jpg",
-                    fullSpecs: ["Экран: 10.5\" Full HD", "Мощность: 60 Вт", "Камера: 13 Мп", "Ассистент: Алиса", "Хаб: Zigbee"],
-                    details: "Флагманская умная колонка с экраном и камерой.",
-                    advantage: "Видеозвонки и просмотр видео на большом экране."
-                }
-            ]
-        },
-        {
-            category: "Морозильные лари",
-            products: [
-                { 
-                    name: "Kraufen CF-293", 
-                    specs: "293 л • Класс A • Глухая крышка", 
-                    price: 1199.00, oldPrice: 1678.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/cf293/kraufen_cf_293.jpg",
-                    fullSpecs: ["Объем: 293 л", "Класс энергопотребления: A", "Тип: ларь", "Крышка: глухая"],
-                    details: "Морозильный ларь Kraufen объемом 293 л.",
-                    advantage: "Вместительный ларь для дома или дачи."
-                },
-                { 
-                    name: "Nordfrost CF 300", 
-                    specs: "300 л • Класс A+ • Глухая крышка", 
-                    price: 1399.00, oldPrice: 1958.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/cf300/nordfrost_cf_300.jpg",
-                    fullSpecs: ["Объем: 300 л", "Класс энергопотребления: A+", "Тип: ларь", "Крышка: глухая"],
-                    details: "Морозильный ларь Nordfrost объемом 300 л.",
-                    advantage: "Энергоэффективный ларь с большим объемом."
-                },
-                { 
-                    name: "Haier HCE430RF", 
-                    specs: "430 л • Класс A+ • Глухая крышка", 
-                    price: 2297.00, oldPrice: 3215.80, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/hce430rf/haier_hce430rf.jpg",
-                    fullSpecs: ["Объем: 430 л", "Класс энергопотребления: A+", "Тип: ларь", "Крышка: глухая"],
-                    details: "Морозильный ларь Haier объемом 430 л.",
-                    advantage: "Огромный объем для больших запасов."
-                }
-            ]
-        },
-        {
-            category: "Компрессоры",
-            products: [
-                { 
-                    name: "DWT K13-15 OA-CU", 
-                    specs: "1300 Вт • 100 л/мин • Ресивер 15 л", 
-                    price: 399.00, oldPrice: 558.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/dwtk1315/dwt_k13_15_oa_cu.jpg",
-                    fullSpecs: ["Мощность: 1300 Вт", "Производительность: 100 л/мин", "Ресивер: 15 л", "Давление: 7 атм"],
-                    details: "Поршневой компрессор DWT с ресивером 15 л.",
-                    advantage: "Компактный компрессор для бытовых задач."
-                },
-                { 
-                    name: "Magnetta BW1100-24", 
-                    specs: "1100 Вт • 185 л/мин • Ресивер 24 л", 
-                    price: 599.00, oldPrice: 838.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/bw110024/magnetta_bw1100_24.jpg",
-                    fullSpecs: ["Мощность: 1100 Вт", "Производительность: 185 л/мин", "Ресивер: 24 л", "Давление: 8 атм"],
-                    details: "Поршневой компрессор Magnetta с ресивером 24 л.",
-                    advantage: "Хорошая производительность для покраски и инструмента."
-                },
-                { 
-                    name: "RockForce RF-265-70", 
-                    specs: "3000 Вт • 250 л/мин • Ресивер 70 л", 
-                    price: 1299.00, oldPrice: 1818.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/rf26570/rockforce_rf_265_70.jpg",
-                    fullSpecs: ["Мощность: 3000 Вт", "Производительность: 250 л/мин", "Ресивер: 70 л", "Давление: 8 атм"],
-                    details: "Мощный поршневой компрессор RockForce с ресивером 70 л.",
-                    advantage: "Большой ресивер и высокая мощность для интенсивного использования."
-                }
-            ]
-        },
-        {
-            category: "Аэрогрили",
-            products: [
-                { 
-                    name: "Scarlett SC-AF15S08D", 
-                    specs: "1400 Вт • 4 л • 8 программ", 
-                    price: 199.00, oldPrice: 278.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/scaf15s08d/scarlett_sc_af15s08d.jpg",
-                    fullSpecs: ["Мощность: 1400 Вт", "Объем: 4 л", "Программы: 8", "Управление: сенсорное"],
-                    details: "Аэрогриль Scarlett объемом 4 л с 8 программами.",
-                    advantage: "Компактный аэрогриль для небольшой семьи."
-                },
-                { 
-                    name: "Kitfort KT-2219-1", 
-                    specs: "1400 Вт • 8 л • Электронное управление", 
-                    price: 299.00, oldPrice: 418.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/kt22191/kitfort_kt_2219_1.jpg",
-                    fullSpecs: ["Мощность: 1400 Вт", "Объем: 8 л", "Управление: электронное", "ТЭН"],
-                    details: "Аэрогриль Kitfort объемом 8 л с электронным управлением.",
-                    advantage: "Большой объем для приготовления крупных блюд."
-                },
-                { 
-                    name: "Trouver Air Fryer FD10s Pro", 
-                    specs: "2000 Вт • 10 л • Dual HeatSync", 
-                    price: 499.00, oldPrice: 698.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/fd10spro/trouver_air_fryer_fd10s_pro.jpg",
-                    fullSpecs: ["Мощность: 2000 Вт", "Объем: 10 л", "Технология: Dual HeatSync", "Управление: сенсорное"],
-                    details: "Аэрогриль Trouver объемом 10 л с технологией Dual HeatSync.",
-                    advantage: "Очень большой объем и двойной нагрев."
-                }
-            ]
-        },
-        {
-            category: "Фотоаппараты",
-            products: [
-                { 
-                    name: "Canon IXUS 155", 
-                    specs: "20 Мп • 10x зум • HD видео", 
-                    price: 499.00, oldPrice: 698.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ixus155/canon_ixus_155.jpg",
-                    fullSpecs: ["Пиксели: 20 Мп", "Зум: 10x оптический", "Видео: HD", "Экран: 2.7\""],
-                    details: "Компактный фотоаппарат Canon IXUS 155 с 10-кратным зумом.",
-                    advantage: "Простой и доступный компакт для повседневной съемки."
-                },
-                { 
-                    name: "Canon EOS 77D", 
-                    specs: "24 Мп • APS-C • 4K видео", 
-                    price: 1999.00, oldPrice: 2798.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/eos77d/canon_eos_77d.jpg",
-                    fullSpecs: ["Пиксели: 24 Мп", "Матрица: APS-C", "Видео: 4K", "Байонет: EF-S"],
-                    details: "Зеркальный фотоаппарат Canon EOS 77D с 4K видео.",
-                    advantage: "Полупрофессиональная камера для энтузиастов."
-                },
-                { 
-                    name: "Canon PowerShot G16", 
-                    specs: "12.1 Мп • 5x зум • Full HD", 
-                    price: 2499.00, oldPrice: 3498.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/g16/canon_powershot_g16.jpg",
-                    fullSpecs: ["Пиксели: 12.1 Мп", "Зум: 5x", "Видео: Full HD", "Экран: 3\""],
-                    details: "Премиальный компакт Canon PowerShot G16 с светосильным объективом.",
-                    advantage: "Отличное качество снимков в компактном корпусе."
-                }
-            ]
-        },
-        {
-            category: "Игровые приставки",
-            products: [
-                { 
-                    name: "Sony PlayStation 5 Slim", 
-                    specs: "4K • 1 ТБ SSD • DualSense", 
-                    price: 2499.00, oldPrice: 3498.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ps5slim/sony_playstation_5_slim.jpg",
-                    fullSpecs: ["Разрешение: 4K", "Накопитель: 1 ТБ SSD", "Геймпад: DualSense", "Привод: Blu-ray"],
-                    details: "Игровая приставка Sony PlayStation 5 Slim с SSD 1 ТБ.",
-                    advantage: "Компактная версия PS5 с дисководом."
-                },
-                { 
-                    name: "Sony PlayStation 5 Pro", 
-                    specs: "8K • 2 ТБ SSD • Ray Tracing", 
-                    price: 3499.00, oldPrice: 4898.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ps5pro/sony_playstation_5_pro.jpg",
-                    fullSpecs: ["Разрешение: 8K", "Накопитель: 2 ТБ SSD", "Графика: Ray Tracing", "Геймпад: DualSense"],
-                    details: "Флагманская приставка Sony PlayStation 5 Pro с 2 ТБ SSD.",
-                    advantage: "Максимальная производительность и поддержка 8K."
-                },
-                { 
-                    name: "Xbox Series X", 
-                    specs: "4K • 1 ТБ SSD • 12 TFLOPS", 
-                    price: 2299.00, oldPrice: 3218.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/xboxseriesx/xbox_series_x.jpg",
-                    fullSpecs: ["Производительность: 12 TFLOPS", "Разрешение: 4K", "Накопитель: 1 ТБ SSD", "Дисковод: 4K UHD Blu-ray"],
-                    details: "Мощная игровая приставка Xbox Series X.",
-                    advantage: "Самая мощная консоль с 12 TFLOPS."
-                }
-            ]
-        },
-        {
-            category: "Мясорубки",
-            products: [
-                { 
-                    name: "Bosch MFWS440B", 
-                    specs: "500 Вт • 2.5 кг/мин • Реверс", 
-                    price: 299.00, oldPrice: 418.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/mfws440b/bosch_mfws440b.jpg",
-                    fullSpecs: ["Мощность: 500 Вт", "Производительность: 2.5 кг/мин", "Реверс: да", "Материал: пластик"],
-                    details: "Мясорубка Bosch MFWS440B с производительностью 2.5 кг/мин.",
-                    advantage: "Надежная базовая мясорубка от Bosch."
-                },
-                { 
-                    name: "Bosch MFW67600", 
-                    specs: "700 Вт • 3.5 кг/мин • Металл", 
-                    price: 449.00, oldPrice: 628.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/mfw67600/bosch_mfw67600.jpg",
-                    fullSpecs: ["Мощность: 700 Вт", "Производительность: 3.5 кг/мин", "Материал: металл/пластик", "Решетки: 3"],
-                    details: "Мясорубка Bosch MFW67600 с производительностью 3.5 кг/мин.",
-                    advantage: "Более мощная модель с металлическими деталями."
-                },
-                { 
-                    name: "Bosch MFWS840M", 
-                    specs: "800 Вт • 4.5 кг/мин • Металл", 
-                    price: 699.00, oldPrice: 978.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/mfws840m/bosch_mfws840m.jpg",
-                    fullSpecs: ["Мощность: 800 Вт", "Производительность: 4.5 кг/мин", "Материал: металл", "Решетки: 3"],
-                    details: "Профессиональная мясорубка Bosch MFWS840M с производительностью 4.5 кг/мин.",
-                    advantage: "Высокая производительность и металлический корпус."
-                }
-            ]
-        },
-        {
-            category: "Кухонные комбайны",
-            products: [
-                { 
-                    name: "Bosch MUMS2EB01", 
-                    specs: "700 Вт • 3.8 л • 4 скорости", 
-                    price: 599.00, oldPrice: 838.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/mums2eb01/bosch_mums2eb01.jpg",
-                    fullSpecs: ["Мощность: 700 Вт", "Объем чаши: 3.8 л", "Скорости: 4", "Материал чаши: нержавеющая сталь"],
-                    details: "Кухонный комбайн Bosch MUMS2EB01 с чашей 3.8 л.",
-                    advantage: "Доступный комбайн с металлической чашей."
-                },
-                { 
-                    name: "Bosch MUM59N26DE", 
-                    specs: "1000 Вт • 3.9 л • 7 скоростей", 
-                    price: 1271.79, oldPrice: 1780.51, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/mum59n26de/bosch_mum59n26de.jpg",
-                    fullSpecs: ["Мощность: 1000 Вт", "Объем чаши: 3.9 л", "Скорости: 7", "Материал чаши: нержавеющая сталь", "Насадки: 7"],
-                    details: "Кухонный комбайн Bosch MUM59N26DE с 7 насадками.",
-                    advantage: "Многофункциональный комбайн с большим набором насадок."
-                },
-                { 
-                    name: "Bosch MUMS6EW00", 
-                    specs: "1600 Вт • 5.5 л • 7 скоростей", 
-                    price: 1999.00, oldPrice: 2798.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/mums6ew00/bosch_mums6ew00.jpg",
-                    fullSpecs: ["Мощность: 1600 Вт", "Объем чаши: 5.5 л", "Скорости: 7", "Материал чаши: нержавеющая сталь"],
-                    details: "Мощный кухонный комбайн Bosch MUMS6EW00 с чашей 5.5 л.",
-                    advantage: "Профессиональная мощность и большой объем."
-                }
-            ]
-        },
-        {
-            category: "Соковыжималки",
-            products: [
-                { 
-                    name: "Braun CJ3050", 
-                    specs: "60 Вт • Для цитрусовых • 1 л", 
-                    price: 199.00, oldPrice: 278.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/cj3050/braun_cj3050.jpg",
-                    fullSpecs: ["Мощность: 60 Вт", "Тип: для цитрусовых", "Объем: 1 л", "Материал: пластик"],
-                    details: "Соковыжималка Braun CJ3050 для цитрусовых.",
-                    advantage: "Компактная соковыжималка для апельсинов и лимонов."
-                },
-                { 
-                    name: "Braun J500", 
-                    specs: "900 Вт • 1.25 л • 75 мм", 
-                    price: 589.00, oldPrice: 824.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/j500/braun_j500.jpg",
-                    fullSpecs: ["Мощность: 900 Вт", "Объем сока: 1.25 л", "Отверстие: 75 мм", "Скорости: 2"],
-                    details: "Соковыжималка Braun J500 с широким отверстием 75 мм.",
-                    advantage: "Мощная центробежная соковыжималка для твердых фруктов."
-                },
-                { 
-                    name: "Kuvings EVO820", 
-                    specs: "240 Вт • Шнековая • 82 мм", 
-                    price: 1999.00, oldPrice: 2798.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/evo820/kuvings_evo820.jpg",
-                    fullSpecs: ["Мощность: 240 Вт", "Тип: шнековая", "Отверстие: 82 мм", "Холодный отжим: да"],
-                    details: "Шнековая соковыжималка Kuvings EVO820 с холодным отжимом.",
-                    advantage: "Максимальное сохранение витаминов и широкое отверстие."
-                }
-            ]
-        },
-        {
-            category: "Хлебопечки",
-            products: [
-                { 
-                    name: "Moulinex OW120130", 
-                    specs: "580 Вт • 6 программ • 500 г", 
-                    price: 299.00, oldPrice: 418.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ow120130/moulinex_ow120130.jpg",
-                    fullSpecs: ["Мощность: 580 Вт", "Программы: 6", "Вес выпечки: 500 г", "Таймер: до 13 ч"],
-                    details: "Хлебопечка Moulinex OW120130 с 6 программами.",
-                    advantage: "Компактная хлебопечка для небольших буханок."
-                },
-                { 
-                    name: "Moulinex OW110E31", 
-                    specs: "600 Вт • 12 программ • 900 г", 
-                    price: 399.00, oldPrice: 558.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/ow110e31/moulinex_ow110e31.jpg",
-                    fullSpecs: ["Мощность: 600 Вт", "Программы: 12", "Вес выпечки: 900 г", "Таймер: до 15 ч"],
-                    details: "Хлебопечка Moulinex OW110E31 с 12 программами и весом 900 г.",
-                    advantage: "Больше программ и больший вес выпечки."
-                },
-                { 
-                    name: "Moulinex La Fournee RZ710130", 
-                    specs: "900 Вт • 17 программ • 1050 г", 
-                    price: 599.00, oldPrice: 838.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/rz710130/moulinex_la_fournee.jpg",
-                    fullSpecs: ["Мощность: 900 Вт", "Программы: 17", "Вес выпечки: 1050 г", "Таймер: до 15 ч"],
-                    details: "Хлебопечка Moulinex La Fournee RZ710130 с 17 программами.",
-                    advantage: "Максимальное количество программ и большая буханка."
-                }
+                { name: "Beko WSPE7616A", basePrice: 1379.00, specs: "Загрузка 7 кг • Отжим 1200 об/мин • Пар", img: "https://www.beko.ru/medias/WSPE7616A-Product-Image-1.jpg", fullSpecs: ["Загрузка: 7 кг", "Отжим: 1200 об/мин", "Глубина: 49 см", "Технология SteamCure", "Класс энергопотребления: A"], advantage: "Инверторный мотор и обработка паром для бережной стирки." },
+                { name: "LG Steam F1296NDS0", basePrice: 1349.00, specs: "Загрузка 6 кг • Отжим 1200 об/мин • Пар", img: "https://www.lg.com/ru/images/stiralnye-mashiny/f1296nds0/f1296nds0-1.jpg", fullSpecs: ["Загрузка: 6 кг", "Отжим: 1200 об/мин", "Глубина: 44 см", "Технология Steam", "Инверторный мотор"], advantage: "Узкий корпус и инновационная технология обработки паром." },
+                { name: "Indesit ILS3 61291 S BY", basePrice: 1049.00, specs: "Загрузка 6 кг • Отжим 1200 об/мин • Узкая", img: "https://www.indesit.ru/medias/1000-Wx1000-H-ILS3-61291-S-BY-Product-Image-1.jpg", fullSpecs: ["Загрузка: 6 кг", "Отжим: 1200 об/мин", "Глубина: 40 см", "Класс энергопотребления: A++"], advantage: "Отличный выбор для малогабаритных квартир." }
             ]
         },
         {
             category: "Посудомоечные машины",
             products: [
-                { 
-                    name: "Beko DFN1000X", 
-                    specs: "12 компл. • 60 см • 5 программ", 
-                    price: 699.00, oldPrice: 978.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/dfn1000x/beko_dfn1000x.jpg",
-                    fullSpecs: ["Вместимость: 12 комплектов", "Ширина: 60 см", "Программы: 5", "Расход воды: 10 л"],
-                    details: "Посудомоечная машина Beko DFN1000X на 12 комплектов.",
-                    advantage: "Базовая полноразмерная модель с экономичным расходом воды."
-                },
-                { 
-                    name: "Beko DIN15210", 
-                    specs: "12 компл. • Встраиваемая • 5 программ", 
-                    price: 899.00, oldPrice: 1258.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/din15210/beko_din15210.jpg",
-                    fullSpecs: ["Вместимость: 12 комплектов", "Тип: встраиваемая", "Программы: 5", "Уровень шума: 49 дБ"],
-                    details: "Встраиваемая посудомоечная машина Beko DIN15210.",
-                    advantage: "Встраиваемая модель для бесшовного дизайна кухни."
-                },
-                { 
-                    name: "Beko DFN 6845 X", 
-                    specs: "13 компл. • 60 см • 8 программ", 
-                    price: 1199.00, oldPrice: 1678.60, 
-                    img: "https://images.weserv.nl/?url=www.21vek.by/img/galleries/dfn6845x/beko_dfn_6845_x.jpg",
-                    fullSpecs: ["Вместимость: 13 комплектов", "Ширина: 60 см", "Программы: 8", "Луч на полу: да"],
-                    details: "Посудомоечная машина Beko DFN 6845 X на 13 комплектов.",
-                    advantage: "Больше программ и луч на полу для индикации."
-                }
+                { name: "Kraufen DWBI-4531", basePrice: 999.00, specs: "12 комплектов • 60 см • Класс A++", img: "https://catalog.onliner.by/static/img/kraufen/dwbi_4531/dwbi_4531_1.jpg", fullSpecs: ["Вместимость: 12 комплектов", "Ширина: 60 см", "Класс энергопотребления: A++", "Программы: 6"], advantage: "Практичное решение для семьи с оптимальным набором программ." },
+                { name: "Whirlpool WSIP4O33PFE", basePrice: 1399.00, specs: "10 комплектов • Встраиваемая • 45 см", img: "https://www.whirlpool.ru/medias/1000-Wx1000-H-WSIP4O33PFE-Product-Image-1.jpg", fullSpecs: ["Вместимость: 10 комплектов", "Тип: Встраиваемая", "Ширина: 45 см", "Класс: A++"], advantage: "Компактная встраиваемая модель с электронным управлением." },
+                { name: "Bosch SPV6ZMX17E", basePrice: 3533.17, specs: "13 комплектов • Встраиваемая • 60 см", img: "https://www.bosch-home.ru/medias/1000-Wx1000-H-SPV6ZMX17E-Product-Image-1.jpg", fullSpecs: ["Вместимость: 13 комплектов", "Тип: Встраиваемая", "Ширина: 60 см", "Класс: A++", "Луч на полу: Да"], advantage: "Немецкое качество, тихая работа и луч на полу." }
+            ]
+        },
+        {
+            category: "Плиты",
+            products: [
+                { name: "Darina ABA 3007 W", basePrice: 986.00, specs: "Газовая • 4 конфорки • Духовка 50 л", img: "https://darina.by/upload/iblock/aba/aba_3007_w_1.jpg", fullSpecs: ["Тип: Газовая", "Конфорки: 4", "Объем духовки: 50 л", "Газ-контроль: Да"], advantage: "Классическая газовая плита с надежным газ-контролем." },
+                { name: "Beko CE 56100 C", basePrice: 1077.41, specs: "Электрическая • 4 конфорки • Духовка 47 л", img: "https://www.beko.ru/medias/1000-Wx1000-H-CE-56100-C-Product-Image-1.jpg", fullSpecs: ["Тип: Электрическая", "Конфорки: 4", "Объем духовки: 47 л", "Мощность: 7500 Вт"], advantage: "Электрическая плита с равномерным нагревом и грилем." },
+                { name: "GEFEST ПГ 900", basePrice: 215.00, specs: "Портативная газовая • 2 конфорки", img: "https://gefest.com/upload/iblock/pg_900_1.jpg", fullSpecs: ["Тип: Портативная газовая", "Конфорки: 2", "Материал: Эмаль"], advantage: "Компактное решение для дачи или небольшой кухни." }
+            ]
+        },
+        {
+            category: "Вытяжки",
+            products: [
+                { name: "Grand Gloucester 50", basePrice: 389.00, specs: "Наклонная • 500 м³/ч • 50 см", img: "https://grand.by/upload/iblock/gloucester_50_1.jpg", fullSpecs: ["Тип: Наклонная", "Производительность: 500 м³/ч", "Ширина: 50 см"], advantage: "Стильный дизайн и эффективная очистка воздуха." },
+                { name: "Faber Flox IX A60", basePrice: 273.00, specs: "Телескопическая • 60 см • Нерж. сталь", img: "https://www.faber.ru/upload/iblock/flox_ix_a60_1.jpg", fullSpecs: ["Тип: Телескопическая", "Ширина: 60 см", "Материал: Нержавеющая сталь"], advantage: "Итальянский дизайн и удобная выдвижная панель." },
+                { name: "Elica Stone WH/A/33", basePrice: 2583.00, specs: "Островная • 1200 м³/ч • Стекло", img: "https://www.elica.com/upload/iblock/stone_wh_a_33_1.jpg", fullSpecs: ["Тип: Островная", "Производительность: 1200 м³/ч", "Материал: Стекло"], advantage: "Премиальная модель для больших кухонь с островом." }
+            ]
+        },
+        {
+            category: "Морозильные лари",
+            products: [
+                { name: "Kraufen CF-293", basePrice: 1149.00, specs: "293 л • Класс A • Глухая крышка", img: "https://catalog.onliner.by/static/img/kraufen/cf_293/cf_293_1.jpg", fullSpecs: ["Объем: 293 л", "Класс энергопотребления: A", "Тип: Ларь"], advantage: "Вместительный ларь для заморозки большого количества продуктов." },
+                { name: "Haier HCE430RF", basePrice: 2297.00, specs: "424 л • Класс A+ • Глухая крышка", img: "https://www.haier.com/ru/upload/iblock/hce430rf_1.jpg", fullSpecs: ["Объем: 424 л", "Класс энергопотребления: A+", "Тип: Ларь", "Управление: Электронное"], advantage: "Огромный объем и современное электронное управление." },
+                { name: "Willmark CF-270IW", basePrice: 1137.00, specs: "210 л • Класс A+ • Инверторный", img: "https://willmark.by/upload/iblock/cf_270iw_1.jpg", fullSpecs: ["Объем: 210 л", "Класс энергопотребления: A+", "Инверторный компрессор"], advantage: "Энергоэффективная модель с надежным инверторным компрессором." }
+            ]
+        },
+        {
+            category: "Кофемашины",
+            products: [
+                { name: "Korting KACM 2026 B Fagotti", basePrice: 1593.00, specs: "Автоматическая • 19 бар • Капучинатор", img: "https://korting.by/upload/iblock/kacm_2026_b_1.jpg", fullSpecs: ["Тип: Автоматическая", "Давление: 19 бар", "Капучинатор: Автоматический", "Мощность: 1580 Вт"], advantage: "Итальянское качество и автоматическое приготовление капучино." },
+                { name: "DeLonghi Dinamica ECAM350.75.S", basePrice: 3802.00, specs: "Автоматическая • 15 бар • Авто-капучинатор", img: "https://www.delonghi.com/upload/iblock/ecam350_75_s_1.jpg", fullSpecs: ["Тип: Автоматическая", "Давление: 15 бар", "Капучинатор: Автоматический", "Кофемолка: Керамическая"], advantage: "Премиальная модель с широким выбором напитков." },
+                { name: "Sencor SES 8000BK", basePrice: 1299.00, specs: "Автоматическая • 20 бар • Компактная", img: "https://www.sencor.ru/upload/iblock/ses_8000bk_1.jpg", fullSpecs: ["Тип: Автоматическая", "Давление: 20 бар", "Объем бака: 1.5 л"], advantage: "Компактная автоматическая кофемашина с высоким давлением." }
+            ]
+        },
+        {
+            category: "Аэрогрили",
+            products: [
+                { name: "Beko FRL 2244 B", basePrice: 273.53, specs: "1500 Вт • 4 л • 8 программ", img: "https://www.beko.ru/medias/FRL-2244-B-Product-Image-1.jpg", fullSpecs: ["Мощность: 1500 Вт", "Объем: 4 л", "Программы: 8"], advantage: "Компактный аэрогриль для здорового питания." },
+                { name: "Trouver IG20 Pro", basePrice: 820.89, specs: "2950 Вт • 7.5 л • Гриль-фритюрница", img: "https://trouver.by/upload/iblock/ig20_pro_1.jpg", fullSpecs: ["Мощность: 2950 Вт", "Объем: 7.5 л", "Функции: Гриль и фритюрница"], advantage: "Многофункциональный прибор, заменяющий несколько устройств." },
+                { name: "Dreame Air Fryer AF30", basePrice: 479.00, specs: "1800 Вт • 6 л • Сенсорное управление", img: "https://www.dreame.tech/upload/iblock/af30_1.jpg", fullSpecs: ["Мощность: 1800 Вт", "Объем: 6 л", "Управление: Сенсорное"], advantage: "Современный дизайн и удобное сенсорное управление." }
+            ]
+        },
+        {
+            category: "Мясорубки",
+            products: [
+                { name: "Moulinex ME684832", basePrice: 596.99, specs: "2000 Вт • 2.6 кг/мин • Реверс", img: "https://www.moulinex.ru/upload/iblock/me684832_1.jpg", fullSpecs: ["Мощность: 2000 Вт", "Производительность: 2.6 кг/мин", "Реверс: Да"], advantage: "Высокая производительность и мощный двигатель." },
+                { name: "Catler FG 403 Food+", basePrice: 529.00, specs: "1000 Вт • 2 скорости • Реверс", img: "https://catler.ru/upload/iblock/fg_403_food_1.jpg", fullSpecs: ["Мощность: 1000 Вт", "Скорости: 2", "Реверс: Да"], advantage: "Компактная и мощная модель с набором аксессуаров." },
+                { name: "Aresa AR-2117", basePrice: 189.00, specs: "1800 Вт • Овощерезка • Реверс", img: "https://aresa.by/upload/iblock/ar_2117_1.jpg", fullSpecs: ["Мощность: 1800 Вт", "Функции: Овощерезка", "Реверс: Да"], advantage: "Доступная цена и дополнительные функции." }
+            ]
+        },
+        {
+            category: "Кухонные комбайны",
+            products: [
+                { name: "Sencor STM 3780GG", basePrice: 889.00, specs: "1200 Вт • 5 л • 6 скоростей", img: "https://www.sencor.ru/upload/iblock/stm_3780gg_1.jpg", fullSpecs: ["Мощность: 1200 Вт", "Объем чаши: 5 л", "Скорости: 6"], advantage: "Многофункциональный комбайн с планетарным смешиванием." },
+                { name: "Tefal QB521B38", basePrice: 976.00, specs: "1100 Вт • 4.6 л • 8 скоростей", img: "https://www.tefal.ru/upload/iblock/qb521b38_1.jpg", fullSpecs: ["Мощность: 1100 Вт", "Объем чаши: 4.6 л", "Скорости: 8"], advantage: "Надежный бренд и удобное управление." },
+                { name: "Bosch MUMS2VM00", basePrice: 795.00, specs: "900 Вт • 3.8 л • Планетарный", img: "https://www.bosch-home.ru/medias/1000-Wx1000-H-MUMS2VM00-Product-Image-1.jpg", fullSpecs: ["Мощность: 900 Вт", "Объем чаши: 3.8 л", "Привод: Планетарный"], advantage: "Немецкое качество и надежность." }
+            ]
+        },
+        {
+            category: "Соковыжималки",
+            products: [
+                { name: "Rondell RDE-1503", basePrice: 347.79, specs: "150 Вт • Шнековая • 0.5 л", img: "https://rondell.ru/upload/iblock/rde_1503_1.jpg", fullSpecs: ["Мощность: 150 Вт", "Тип: Шнековая", "Объем: 0.5 л"], advantage: "Максимальное сохранение витаминов благодаря холодному отжиму." },
+                { name: "Moulinex ZU600110", basePrice: 946.00, specs: "200 Вт • Шнековая • 85 мм", img: "https://www.moulinex.ru/upload/iblock/zu600110_1.jpg", fullSpecs: ["Мощность: 200 Вт", "Тип: Шнековая", "Отверстие: 85 мм"], advantage: "Широкое отверстие для загрузки целых фруктов." },
+                { name: "Scarlett SC-JE50S65", basePrice: 491.00, specs: "800 Вт • Центробежная • 1.2 л", img: "https://scarlett.ru/upload/iblock/sc_je50s65_1.jpg", fullSpecs: ["Мощность: 800 Вт", "Тип: Центробежная", "Объем: 1.2 л"], advantage: "Быстрая и удобная центробежная модель." }
+            ]
+        },
+        {
+            category: "Хлебопечки",
+            products: [
+                { name: "Kitfort KT-309", basePrice: 322.40, specs: "850 Вт • 16 программ • 1.5 кг", img: "https://kitfort.ru/upload/iblock/kt_309_1.jpg", fullSpecs: ["Мощность: 850 Вт", "Программы: 16", "Макс. вес: 1.5 кг"], advantage: "Оригинальный дизайн и широкий выбор программ." },
+                { name: "Garlyn BR-2000", basePrice: 638.00, specs: "850 Вт • 25 программ • 1.5 кг", img: "https://garlyn.ru/upload/iblock/br_2000_1.jpg", fullSpecs: ["Мощность: 850 Вт", "Программы: 25", "Макс. вес: 1.5 кг"], advantage: "Максимальное количество программ для любых рецептов." },
+                { name: "Gorenje BM910WII", basePrice: 354.00, specs: "550 Вт • 15 программ • 0.9 кг", img: "https://www.gorenje.ru/upload/iblock/bm910wii_1.jpg", fullSpecs: ["Мощность: 550 Вт", "Программы: 15", "Макс. вес: 0.9 кг"], advantage: "Компактная модель с базовым набором функций." }
+            ]
+        },
+        {
+            category: "Вертикальные пылесосы",
+            products: [
+                { name: "Tineco Pure One S30 Pro", basePrice: 930.49, specs: "500 Вт • 0.6 л • Умный дисплей", img: "https://tineco.com/upload/iblock/pure_one_s30_pro_1.jpg", fullSpecs: ["Мощность: 500 Вт", "Объем: 0.6 л", "Дисплей: LED"], advantage: "Автоматическая регулировка мощности и умный дисплей." },
+                { name: "BQ VCA0103H", basePrice: 272.89, specs: "30 мин • 0.5 л • HEPA-фильтр", img: "https://bq.ru/upload/iblock/vca0103h_1.jpg", fullSpecs: ["Время работы: 30 мин", "Объем: 0.5 л", "Фильтр: HEPA"], advantage: "Доступная беспроводная модель для ежедневной уборки." },
+                { name: "Cecotec Conga Rockstar 1500", basePrice: 523.70, specs: "1500 Вт • 45 мин • 12 кПа", img: "https://cecotec.ru/upload/iblock/conga_rockstar_1500_1.jpg", fullSpecs: ["Мощность: 1500 Вт", "Время работы: 45 мин", "Всасывание: 12 кПа"], advantage: "Высокая мощность и длительное время работы." }
+            ]
+        },
+        {
+            category: "Роботы-пылесосы",
+            products: [
+                { name: "Dreame X60 Ultra Complete", basePrice: 4499.00, specs: "35000 Па • Автоочистка • Лидар", img: "https://www.dreame.tech/upload/iblock/x60_ultra_1.jpg", fullSpecs: ["Всасывание: 35000 Па", "База: Автоочистка и мойка", "Навигация: Лидар"], advantage: "Флагманская модель с максимальной автономностью." },
+                { name: "Dreame Robot Vacuum D30 Pro", basePrice: 889.00, specs: "25000 Па • Влажная уборка • Лидар", img: "https://www.dreame.tech/upload/iblock/d30_pro_1.jpg", fullSpecs: ["Всасывание: 25000 Па", "Уборка: Сухая и влажная", "Навигация: Лидар"], advantage: "Оптимальный баланс мощности и цены." },
+                { name: "Eufy Omni E25", basePrice: 1699.00, specs: "20000 Па • Автоочистка • Горячая мойка", img: "https://eufy.com/upload/iblock/omni_e25_1.jpg", fullSpecs: ["Всасывание: 20000 Па", "База: Автоочистка", "Мойка: Горячая вода"], advantage: "Полный фарш функций для идеальной чистоты." }
+            ]
+        },
+        {
+            category: "Компрессоры",
+            products: [
+                { name: "ForceKraft FK-BM25/50", basePrice: 427.00, specs: "1100 Вт • 50 л • 180 л/мин", img: "https://forcekraft.ru/upload/iblock/fk_bm25_50_1.jpg", fullSpecs: ["Мощность: 1100 Вт", "Ресивер: 50 л", "Производительность: 180 л/мин"], advantage: "Универсальный компрессор для гаража и дома." },
+                { name: "Вихрь КП-600/50", basePrice: 1006.00, specs: "2600 Вт • 50 л • 600 л/мин", img: "https://vihr.ru/upload/iblock/kp_600_50_1.jpg", fullSpecs: ["Мощность: 2600 Вт", "Ресивер: 50 л", "Производительность: 600 л/мин"], advantage: "Высокая производительность для интенсивного использования." },
+                { name: "Gigant GSWK-9/1400", basePrice: 507.00, specs: "1400 Вт • 9 л • 195 л/мин", img: "https://gigant.ru/upload/iblock/gswk_9_1400_1.jpg", fullSpecs: ["Мощность: 1400 Вт", "Ресивер: 9 л", "Производительность: 195 л/мин"], advantage: "Компактный и мобильный компрессор." }
+            ]
+        },
+        {
+            category: "Смартфоны",
+            products: [
+                { name: "Oukitel WP55", basePrice: 1048.00, specs: "6.58\" • 12/256 ГБ • 11000 мАч", img: "https://oukitel.com/upload/iblock/wp55_1.jpg", fullSpecs: ["Экран: 6.58\" IPS", "Память: 12/256 ГБ", "Аккумулятор: 11000 мАч", "Защита: IP69K"], advantage: "Защищенный смартфон с огромной батареей." },
+                { name: "Vivo X300FE 5G", basePrice: 2899.00, specs: "6.7\" AMOLED • 12/256 ГБ • ZEISS", img: "https://www.vivo.com/upload/iblock/x300fe_1.jpg", fullSpecs: ["Экран: 6.7\" AMOLED", "Память: 12/256 ГБ", "Камера: ZEISS"], advantage: "Флагманская камера и премиальный дизайн." },
+                { name: "Tecno Camon 50", basePrice: 1220.00, specs: "6.6\" 120 Гц • 8/256 ГБ • 50 Мп", img: "https://tecno-mobile.com/upload/iblock/camon_50_1.jpg", fullSpecs: ["Экран: 6.6\" 120 Гц", "Память: 8/256 ГБ", "Камера: 50 Мп"], advantage: "Отличный баланс цены и производительности." }
+            ]
+        },
+        {
+            category: "Ноутбуки",
+            products: [
+                { name: "HONOR MagicBook 16 2026", basePrice: 4299.00, specs: "16\" 2.5K 180 Гц • 16/512 ГБ", img: "https://www.honor.com/upload/iblock/magicbook_16_2026_1.jpg", fullSpecs: ["Экран: 16\" 2.5K 180 Гц", "Память: 16/512 ГБ", "Батарея: 92 Втч"], advantage: "Игровой экран 180 Гц и длительная автономность." },
+                { name: "Lenovo IdeaPad Slim 3 16ARP10", basePrice: 3651.00, specs: "16\" IPS • Ryzen 5 • 16/512 ГБ", img: "https://www.lenovo.com/upload/iblock/ideapad_slim_3_16arp10_1.jpg", fullSpecs: ["Экран: 16\" IPS", "Процессор: Ryzen 5", "Память: 16/512 ГБ"], advantage: "Надежный офисный ноутбук с большим экраном." },
+                { name: "Lenovo IdeaPad 1 14AMN7", basePrice: 899.00, specs: "14\" IPS • Ryzen 3 • 8/512 ГБ", img: "https://www.lenovo.com/upload/iblock/ideapad_1_14amn7_1.jpg", fullSpecs: ["Экран: 14\" IPS", "Процессор: Ryzen 3", "Память: 8/512 ГБ"], advantage: "Доступный ноутбук для базовых задач." }
+            ]
+        },
+        {
+            category: "Компьютеры",
+            products: [
+                { name: "Z-Tech G64-4-10-410-N-0001n", basePrice: 1025.29, specs: "Pentium Gold • 4/120 ГБ", img: "https://z-tech.by/upload/iblock/g64_4_10_410_n_0001n_1.jpg", fullSpecs: ["Процессор: Pentium Gold", "Память: 4/120 ГБ"], advantage: "Бюджетный компьютер для офиса." },
+                { name: "IRU Corp 710Z5", basePrice: 8915.00, specs: "Core i7 • 16/1024 ГБ • RTX 5060Ti", img: "https://iru.ru/upload/iblock/corp_710z5_1.jpg", fullSpecs: ["Процессор: Core i7", "Память: 16/1024 ГБ", "Видеокарта: RTX 5060Ti"], advantage: "Мощная станция для дизайна и 3D." },
+                { name: "N-Tech Intro BK94015", basePrice: 5396.00, specs: "Ryzen 5 • 32/512 ГБ • RTX 5050", img: "https://n-tech.by/upload/iblock/intro_bk94015_1.jpg", fullSpecs: ["Процессор: Ryzen 5", "Память: 32/512 ГБ", "Видеокарта: RTX 5050"], advantage: "Игровой ПК с современной видеокартой." }
+            ]
+        },
+        {
+            category: "Телевизоры",
+            products: [
+                { name: "JVC 55\" LT-55MU7500", basePrice: 1599.00, specs: "55\" 4K QLED • Android TV", img: "https://jvc.ru/upload/iblock/lt_55mu7500_1.jpg", fullSpecs: ["Диагональ: 55\"", "Разрешение: 4K", "Smart TV: Android TV"], advantage: "Яркая QLED-картинка и умная система." },
+                { name: "POLARLine 32\" 32PL13TC-SM", basePrice: 545.83, specs: "32\" HD • Smart TV", img: "https://polarline.ru/upload/iblock/32pl13tc_sm_1.jpg", fullSpecs: ["Диагональ: 32\"", "Разрешение: HD", "Smart TV: Да"], advantage: "Доступный умный телевизор для кухни." },
+                { name: "QUANTUM 43\" 43U6BQ", basePrice: 1149.00, specs: "43\" 4K QLED • Google TV", img: "https://quantum.by/upload/iblock/43u6bq_1.jpg", fullSpecs: ["Диагональ: 43\"", "Разрешение: 4K", "Smart TV: Google TV"], advantage: "Современная QLED-матрица и Google TV." }
+            ]
+        },
+        {
+            category: "Фотоаппараты",
+            products: [
+                { name: "Canon EOS R50 Kit", basePrice: 2759.00, specs: "24.2 Мп • APS-C • 4K", img: "https://www.canon.ru/upload/iblock/eos_r50_kit_1.jpg", fullSpecs: ["Матрица: 24.2 Мп APS-C", "Видео: 4K", "Байонет: RF"], advantage: "Отличный выбор для начинающих блогеров." },
+                { name: "Pentax WG-10 Black-Red", basePrice: 410.00, specs: "14 Мп • 5x зум • Защищенный", img: "https://ricoh-imaging.ru/upload/iblock/wg_10_black_red_1.jpg", fullSpecs: ["Матрица: 14 Мп", "Зум: 5x", "Защита: Водонепроницаемый"], advantage: "Неубиваемый компакт для экстремальных условий." },
+                { name: "Kodak MS300B", basePrice: 429.00, specs: "13 Мп • Мгновенная печать", img: "https://kodak.com/upload/iblock/ms300b_1.jpg", fullSpecs: ["Матрица: 13 Мп", "Печать: Мгновенная"], advantage: "Уникальная возможность мгновенной печати фото." }
+            ]
+        },
+        {
+            category: "Игровые приставки",
+            products: [
+                { name: "Sony PlayStation 5 Slim", basePrice: 3319.00, specs: "4K • 1 ТБ SSD • DualSense", img: "https://www.playstation.com/upload/iblock/ps5_slim_1.jpg", fullSpecs: ["Разрешение: 4K", "Накопитель: 1 ТБ SSD", "Геймпад: DualSense"], advantage: "Компактная версия PS5 с дисководом." },
+                { name: "Nintendo Switch 2", basePrice: 2340.00, specs: "7\" OLED • 64 ГБ • Гибридная", img: "https://www.nintendo.com/upload/iblock/switch_2_1.jpg", fullSpecs: ["Экран: 7\" OLED", "Память: 64 ГБ", "Режимы: Портативный и ТВ"], advantage: "Уникальная гибридность и эксклюзивные игры." },
+                { name: "Microsoft Xbox Series S", basePrice: 2999.00, specs: "1440p • 512 ГБ SSD • Digital", img: "https://www.microsoft.com/upload/iblock/xbox_series_s_1.jpg", fullSpecs: ["Разрешение: 1440p", "Накопитель: 512 ГБ SSD", "Тип: Digital"], advantage: "Самая доступная консоль нового поколения." }
+            ]
+        },
+        {
+            category: "Bluetooth колонки",
+            products: [
+                { name: "Sven PS-990", basePrice: 721.00, specs: "180 Вт • IPx7 • TWS", img: "https://sven.ru/upload/iblock/ps_990_1.jpg", fullSpecs: ["Мощность: 180 Вт", "Защита: IPx7", "TWS: Да"], advantage: "Мощный звук и защита от воды." },
+                { name: "Defender Boomer 85", basePrice: 380.00, specs: "100 Вт • RGB • TWS", img: "https://defender.ru/upload/iblock/boomer_85_1.jpg", fullSpecs: ["Мощность: 100 Вт", "Подсветка: RGB", "TWS: Да"], advantage: "Яркая подсветка и хороший бас." },
+                { name: "JBL Go Essential 2", basePrice: 120.00, specs: "3 Вт • 5 ч • Компактная", img: "https://www.jbl.com/upload/iblock/go_essential_2_1.jpg", fullSpecs: ["Мощность: 3 Вт", "Время работы: 5 ч", "Вес: 180 г"], advantage: "Ультракомпактная колонка для путешествий." }
+            ]
+        },
+        {
+            category: "Яндекс Станции",
+            products: [
+                { name: "Яндекс Станция Миди с Zigbee", basePrice: 569.00, specs: "24 Вт • Алиса • Zigbee", img: "https://yandex.ru/upload/iblock/station_midi_1.jpg", fullSpecs: ["Мощность: 24 Вт", "Ассистент: Алиса", "Хаб: Zigbee"], advantage: "Отличный звук и управление умным домом." },
+                { name: "Яндекс Станция Стрит", basePrice: 359.00, specs: "30 Вт • IP67 • Портативная", img: "https://yandex.ru/upload/iblock/station_street_1.jpg", fullSpecs: ["Мощность: 30 Вт", "Защита: IP67", "Портативная: Да"], advantage: "Портативная колонка с Алисой для улицы." },
+                { name: "Яндекс Станция Дуо Макс", basePrice: 4318.08, specs: "10.5\" экран • 60 Вт • Zigbee", img: "https://yandex.ru/upload/iblock/station_duo_max_1.jpg", fullSpecs: ["Экран: 10.5\" Full HD", "Мощность: 60 Вт", "Хаб: Zigbee"], advantage: "Видеозвонки и просмотр видео на большом экране." }
             ]
         }
     ];
@@ -1210,7 +660,7 @@
         let html = '';
         let navHtml = '';
 
-        catalogData.forEach((cat, index) => {
+        rawCatalog.forEach((cat, index) => {
             navHtml += `<a href="#cat-${index}" class="category-pill">${cat.category}</a>`;
 
             html += `<section class="category-section fade-up" id="cat-${index}">
@@ -1218,7 +668,9 @@
                         <div class="product-grid">`;
 
             cat.products.forEach(p => {
-                const monthly = calcPayment(p.price);
+                const finalPrice = p.basePrice * 1.8;
+                const oldPrice = finalPrice * 1.4;
+                const monthly = calcPayment(finalPrice);
                 const fallbackImg = `https://placehold.co/600x400/1e293b/94a3b8?text=${encodeURIComponent(p.name)}`;
                 const fullSpecsHtml = p.fullSpecs.map(spec => `<li>${spec}</li>`).join('');
 
@@ -1234,8 +686,8 @@
                                     <p class="product-specs">${p.specs}</p>
                                     
                                     <div class="price-container">
-                                        <span class="old-price">${fmtMoney(p.oldPrice)}</span>
-                                        <span class="current-price">${fmtMoney(p.price)}</span>
+                                        <span class="old-price">${fmtMoney(oldPrice)}</span>
+                                        <span class="current-price">${fmtMoney(finalPrice)}</span>
                                     </div>
 
                                     <div class="monthly-payment">
