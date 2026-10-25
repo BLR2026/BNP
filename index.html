@@ -34,7 +34,6 @@
             min-height: 100vh;
         }
 
-        /* --- Живой фон с плавающими градиентами --- */
         .ambient-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -57,7 +56,6 @@
             100% { transform: translate(50px, 50px) scale(1.1); }
         }
 
-        /* --- Листопад на фоне --- */
         #falling-leaves {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0; overflow: hidden;
@@ -81,7 +79,6 @@
             z-index: 1;
         }
 
-        /* --- Шапка (Hero) --- */
         header {
             padding: 80px 20px 60px;
             text-align: center;
@@ -137,7 +134,6 @@
         }
         .feature-badge svg { width: 20px; height: 20px; fill: var(--accent-glow); }
 
-        /* --- Таймер --- */
         .timer-container {
             margin: 40px auto 0;
             display: flex;
@@ -163,7 +159,6 @@
         .timer-unit { display: flex; flex-direction: column; align-items: center; }
         .timer-unit span:last-child { font-size: 0.7rem; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 400; margin-top: 5px; }
 
-        /* --- Сетка категорий (Bento Grid) --- */
         .category-nav {
             display: flex;
             overflow-x: auto;
@@ -206,7 +201,6 @@
             gap: 25px;
         }
 
-        /* --- Карточка товара --- */
         .product-card {
             background: var(--bg-card);
             backdrop-filter: blur(20px);
@@ -234,16 +228,21 @@
             background: #0f172a;
             margin-bottom: 20px;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .product-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            background: #fff;
+            padding: 10px;
             transition: transform 0.5s ease;
         }
 
-        .product-card:hover .product-image { transform: scale(1.08); }
+        .product-card:hover .product-image { transform: scale(1.05); }
 
         .product-info {
             display: flex;
@@ -288,7 +287,6 @@
             color: #fff;
         }
 
-        /* --- Блок оплаты --- */
         .monthly-payment {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid rgba(16, 185, 129, 0.2);
@@ -316,7 +314,6 @@
         }
         .monthly-value span { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; }
 
-        /* --- Анимация появления --- */
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
@@ -343,7 +340,6 @@
 </head>
 <body>
 
-<!-- Фон -->
 <div class="ambient-bg">
     <div class="ambient-blob blob-1"></div>
     <div class="ambient-blob blob-2"></div>
@@ -352,7 +348,6 @@
 <div id="falling-leaves"></div>
 
 <div class="container">
-    <!-- Шапка -->
     <header class="fade-up">
         <div class="pre-title">Сезонная распродажа 2026</div>
         <h1>Листопад скидок в БНП</h1>
@@ -368,7 +363,6 @@
             </div>
         </div>
 
-        <!-- Таймер -->
         <div class="timer-container">
             <div class="timer-label">До конца акции осталось:</div>
             <div class="timer-clock" id="countdown">
@@ -381,10 +375,7 @@
         </div>
     </header>
 
-    <!-- Навигация по категориям -->
     <div class="category-nav" id="categoryNav"></div>
-
-    <!-- Каталог -->
     <main id="catalog"></main>
 
     <footer>
@@ -394,195 +385,196 @@
 </div>
 
 <script>
-    // Данные каталога (23 категории)
+    // Данные каталога
+    // ВАЖНО: Для некоторых товаров уже вставлены реальные фото.
+    // Для остальных стоят заглушки — замените их по инструкции выше.
     const catalogData = [
         {
             category: "Холодильники",
             products: [
-                { name: "ATLANT ХМ 4425-000-N", specs: "400 л • No Frost • Класс A+ • Высота 206 см", price: 2770.20, oldPrice: 3878.28, img: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=600&h=400&fit=crop" },
-                { name: "ATLANT ХМ 4621-181", specs: "360 л • No Frost • Класс A++ • Нижняя морозилка", price: 2763.00, oldPrice: 3868.20, img: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600&h=400&fit=crop" },
-                { name: "Hyundai CT10021H", specs: "85 л • Капельная система • Класс A+ • Компактный", price: 1077.35, oldPrice: 1508.29, img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600&h=400&fit=crop" }
+                { name: "ATLANT ХМ 4425-000-N", specs: "400 л • No Frost • Класс A+ • Высота 206 см", price: 2770.20, oldPrice: 3878.28, img: "https://images.5element.by/resize/618/6188f3188860b2c5c524a83065a1c381/246_246_1/39fc0702feac9d10a584ac6d6fbf838f.jpg" },
+                { name: "ATLANT ХМ 4621-181", specs: "360 л • No Frost • Класс A++ • Нижняя морозилка", price: 2763.00, oldPrice: 3868.20, img: "https://placehold.co/600x400/1e293b/94a3b8?text=ATLANT+ХМ+4621" },
+                { name: "Hyundai CT10021H", specs: "85 л • Капельная система • Класс A+ • Компактный", price: 1077.35, oldPrice: 1508.29, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Hyundai+CT10021H" }
             ]
         },
         {
             category: "Стиральные машины",
             products: [
-                { name: "ATLANT СМА 70С1210-00", specs: "7 кг • Отжим 1200 • Класс A++ • Глубина 40 см", price: 2038.25, oldPrice: 2853.55, img: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&h=400&fit=crop" },
-                { name: "Samsung WW70AG4S21VELD", specs: "7 кг • Отжим 1200 • Класс A+++ • Пар", price: 3166.20, oldPrice: 4432.68, img: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=600&h=400&fit=crop" },
-                { name: "Evelux EW 47121", specs: "7 кг • Отжим 1200 • Класс A+ • 15 программ", price: 1260.00, oldPrice: 1764.00, img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop" }
+                { name: "ATLANT СМА 70С1210-00", specs: "7 кг • Отжим 1200 • Класс A++ • Глубина 40 см", price: 2038.25, oldPrice: 2853.55, img: "https://placehold.co/600x400/1e293b/94a3b8?text=ATLANT+СМА+70С1210" },
+                { name: "Samsung WW70AG4S21VELD", specs: "7 кг • Отжим 1200 • Класс A+++ • Пар", price: 3166.20, oldPrice: 4432.68, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Samsung+WW70AG4S21" },
+                { name: "Evelux EW 47121", specs: "7 кг • Отжим 1200 • Класс A+ • 15 программ", price: 1260.00, oldPrice: 1764.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Evelux+EW+47121" }
             ]
         },
         {
             category: "Смартфоны",
             products: [
-                { name: "POCO M8 5G", specs: "8/256 ГБ • 6.6\" 90 Гц • 50 Мп • 5G", price: 1726.20, oldPrice: 2416.68, img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop" },
-                { name: "Samsung Galaxy A57 5G", specs: "8/256 ГБ • 6.5\" AMOLED • 64 Мп • 5G", price: 3058.20, oldPrice: 4281.48, img: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&h=400&fit=crop" },
-                { name: "Xiaomi Redmi Note 17 Pro Max", specs: "8/512 ГБ • 6.7\" AMOLED • 108 Мп • 5G", price: 4138.20, oldPrice: 5793.48, img: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop" }
+                { name: "POCO M8 5G", specs: "8/256 ГБ • 6.6\" 90 Гц • 50 Мп • 5G", price: 1726.20, oldPrice: 2416.68, img: "https://placehold.co/600x400/1e293b/94a3b8?text=POCO+M8+5G" },
+                { name: "Samsung Galaxy A57 5G", specs: "8/256 ГБ • 6.5\" AMOLED • 64 Мп • 5G", price: 3058.20, oldPrice: 4281.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Samsung+Galaxy+A57" },
+                { name: "Xiaomi Redmi Note 17 Pro Max", specs: "8/512 ГБ • 6.7\" AMOLED • 108 Мп • 5G", price: 4138.20, oldPrice: 5793.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Xiaomi+Redmi+Note+17" }
             ]
         },
         {
             category: "Ноутбуки",
             products: [
-                { name: "Lenovo IdeaPad Slim 3", specs: "15.6\" • Ryzen 5 • 16 ГБ • 512 ГБ SSD • Без ОС", price: 3942.11, oldPrice: 5518.95, img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop" },
-                { name: "Maibenben Medio M15D", specs: "15.6\" • Core i5 • 16 ГБ • 512 ГБ SSD • Win 11 Pro", price: 4158.22, oldPrice: 5821.51, img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop" },
-                { name: "Horizont H-Book 15 IPK2", specs: "15.6\" • Core i7 • 16 ГБ • 512 ГБ SSD • Win 11 Pro", price: 2817.99, oldPrice: 3945.19, img: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=400&fit=crop" }
+                { name: "Lenovo IdeaPad Slim 3", specs: "15.6\" • Ryzen 5 • 16 ГБ • 512 ГБ SSD • Без ОС", price: 3942.11, oldPrice: 5518.95, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Lenovo+IdeaPad+Slim+3" },
+                { name: "Maibenben Medio M15D", specs: "15.6\" • Core i5 • 16 ГБ • 512 ГБ SSD • Win 11 Pro", price: 4158.22, oldPrice: 5821.51, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Maibenben+Medio+M15D" },
+                { name: "Horizont H-Book 15 IPK2", specs: "15.6\" • Core i7 • 16 ГБ • 512 ГБ SSD • Win 11 Pro", price: 2817.99, oldPrice: 3945.19, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Horizont+H-Book+15" }
             ]
         },
         {
             category: "Компьютеры",
             products: [
-                { name: "N-Tech King Office M", specs: "Pentium G5400 • 8 ГБ • 240 ГБ SSD + 1 ТБ HDD", price: 6246.00, oldPrice: 8744.40, img: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=400&fit=crop" },
-                { name: "Игровой ПК 3C121FD", specs: "Ryzen 5 • 16 ГБ • 512 ГБ SSD • RTX", price: 6300.00, oldPrice: 8820.00, img: "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&h=400&fit=crop" },
-                { name: "MultiOffice 7R57D", specs: "Core i5 • 16 ГБ • 512 ГБ SSD • Win 11 • 27\" Монитор", price: 7174.80, oldPrice: 10044.72, img: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=400&fit=crop" }
+                { name: "N-Tech King Office M", specs: "Pentium G5400 • 8 ГБ • 240 ГБ SSD + 1 ТБ HDD", price: 6246.00, oldPrice: 8744.40, img: "https://placehold.co/600x400/1e293b/94a3b8?text=N-Tech+King+Office+M" },
+                { name: "Игровой ПК 3C121FD", specs: "Ryzen 5 • 16 ГБ • 512 ГБ SSD • RTX", price: 6300.00, oldPrice: 8820.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Игровой+ПК+3C121FD" },
+                { name: "MultiOffice 7R57D", specs: "Core i5 • 16 ГБ • 512 ГБ SSD • Win 11 • 27\" Монитор", price: 7174.80, oldPrice: 10044.72, img: "https://placehold.co/600x400/1e293b/94a3b8?text=MultiOffice+7R57D" }
             ]
         },
         {
             category: "Вертикальные пылесосы",
             products: [
-                { name: "Redkey P9", specs: "Беспроводной • 150 Вт • Бак 0.5 л • Телескоп. труба", price: 945.00, oldPrice: 1323.00, img: "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&h=400&fit=crop" },
-                { name: "Dreame G10 Pro", specs: "Сухая/влажная уборка • 250 Вт • Автоочистка", price: 1168.20, oldPrice: 1635.48, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
-                { name: "Bosch BCS611AM", specs: "18 В • 40 мин работы • Бак 0.4 л", price: 2100.00, oldPrice: 2940.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
+                { name: "Redkey P9", specs: "Беспроводной • 150 Вт • Бак 0.5 л • Телескоп. труба", price: 945.00, oldPrice: 1323.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Redkey+P9" },
+                { name: "Dreame G10 Pro", specs: "Сухая/влажная уборка • 250 Вт • Автоочистка", price: 1168.20, oldPrice: 1635.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Dreame+G10+Pro" },
+                { name: "Bosch BCS611AM", specs: "18 В • 40 мин работы • Бак 0.4 л", price: 2100.00, oldPrice: 2940.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Bosch+BCS611AM" }
             ]
         },
         {
             category: "Роботы-пылесосы",
             products: [
-                { name: "Dreame Robot Vacuum F21", specs: "Лидар • 630 Па • Влажная уборка • 3200 мАч", price: 1134.00, oldPrice: 1587.60, img: "https://images.unsplash.com/photo-1589820296144-160a6c3b0b53?w=600&h=400&fit=crop" },
-                { name: "Roborock Qrevo Curv", specs: "Автоочистка • 10000 Па • Лидар", price: 5288.58, oldPrice: 7404.01, img: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600&h=400&fit=crop" },
-                { name: "Dreame X50 Master", specs: "20000 Па • Горячая мойка • Выдвижной лидар", price: 7828.36, oldPrice: 10959.71, img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&h=400&fit=crop" }
+                { name: "Dreame Robot Vacuum F21", specs: "Лидар • 630 Па • Влажная уборка • 3200 мАч", price: 1134.00, oldPrice: 1587.60, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Dreame+F21" },
+                { name: "Roborock Qrevo Curv", specs: "Автоочистка • 10000 Па • Лидар", price: 5288.58, oldPrice: 7404.01, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Roborock+Qrevo+Curv" },
+                { name: "Dreame X50 Master", specs: "20000 Па • Горячая мойка • Выдвижной лидар", price: 7828.36, oldPrice: 10959.71, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Dreame+X50+Master" }
             ]
         },
         {
             category: "Кофемашины",
             products: [
-                { name: "DeLonghi ECP 33.21", specs: "Рожковая • 15 бар • 1 л • Ручной капучинатор", price: 1042.20, oldPrice: 1459.08, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop" },
-                { name: "DeLonghi Magnifica Start", specs: "Автоматическая • 15 бар • Встроенная кофемолка", price: 3166.20, oldPrice: 4432.68, img: "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=600&h=400&fit=crop" },
-                { name: "DeLonghi ECAM290.61.B", specs: "Автоматическая • Авто-капучинатор • Кофемолка", price: 3688.20, oldPrice: 5163.48, img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&h=400&fit=crop" }
+                { name: "DeLonghi ECP 33.21", specs: "Рожковая • 15 бар • 1 л • Ручной капучинатор", price: 1042.20, oldPrice: 1459.08, img: "https://placehold.co/600x400/1e293b/94a3b8?text=DeLonghi+ECP+33.21" },
+                { name: "DeLonghi Magnifica Start", specs: "Автоматическая • 15 бар • Встроенная кофемолка", price: 3166.20, oldPrice: 4432.68, img: "https://placehold.co/600x400/1e293b/94a3b8?text=DeLonghi+Magnifica" },
+                { name: "DeLonghi ECAM290.61.B", specs: "Автоматическая • Авто-капучинатор • Кофемолка", price: 3688.20, oldPrice: 5163.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=DeLonghi+ECAM290" }
             ]
         },
         {
             category: "Плиты",
             products: [
-                { name: "Cezaris ПГ 2150-03", specs: "Газовая • 2 конфорки • Эмаль • 7900 Вт", price: 923.40, oldPrice: 1292.76, img: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&h=400&fit=crop" },
-                { name: "GEFEST 5110-01", specs: "Комбинированная • Электроподжиг • 7600 Вт", price: 1348.67, oldPrice: 1888.14, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" },
-                { name: "Hansa FCCX58221", specs: "Электрическая • 4 конфорки • 9000 Вт", price: 2807.71, oldPrice: 3930.80, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop" }
+                { name: "Cezaris ПГ 2150-03", specs: "Газовая • 2 конфорки • Эмаль • 7900 Вт", price: 923.40, oldPrice: 1292.76, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Cezaris+ПГ+2150" },
+                { name: "GEFEST 5110-01", specs: "Комбинированная • Электроподжиг • 7600 Вт", price: 1348.67, oldPrice: 1888.14, img: "https://placehold.co/600x400/1e293b/94a3b8?text=GEFEST+5110" },
+                { name: "Hansa FCCX58221", specs: "Электрическая • 4 конфорки • 9000 Вт", price: 2807.71, oldPrice: 3930.80, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Hansa+FCCX58221" }
             ]
         },
         {
             category: "Вытяжки",
             products: [
-                { name: "GEFEST ВО 1503", specs: "Купольная • 600 м³/ч • 50 см • Нерж. сталь", price: 705.60, oldPrice: 987.84, img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" },
-                { name: "Konigin Beauty 31", specs: "Коробчатая • Медный корпус • 1200 м³/ч", price: 2682.00, oldPrice: 3754.80, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=400&fit=crop" },
-                { name: "Faber Value PB", specs: "Купольная • 1000 м³/ч • Стекло и сталь", price: 3600.00, oldPrice: 5040.00, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" }
+                { name: "GEFEST ВО 1503", specs: "Купольная • 600 м³/ч • 50 см • Нерж. сталь", price: 705.60, oldPrice: 987.84, img: "https://placehold.co/600x400/1e293b/94a3b8?text=GEFEST+ВО+1503" },
+                { name: "Konigin Beauty 31", specs: "Коробчатая • Медный корпус • 1200 м³/ч", price: 2682.00, oldPrice: 3754.80, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Konigin+Beauty+31" },
+                { name: "Faber Value PB", specs: "Купольная • 1000 м³/ч • Стекло и сталь", price: 3600.00, oldPrice: 5040.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Faber+Value+PB" }
             ]
         },
         {
             category: "Bluetooth колонки",
             products: [
-                { name: "JBL Flip 6", specs: "20 Вт • IP67 • 12 ч работы", price: 1080.00, oldPrice: 1512.00, img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&h=400&fit=crop" },
-                { name: "Marshall Emberton", specs: "20 Вт • Стерео • 20 ч • Ретро-дизайн", price: 2160.00, oldPrice: 3024.00, img: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=600&h=400&fit=crop" },
-                { name: "JBL PartyBox 310", specs: "240 Вт • Караоке • Подсветка • Колеса", price: 3600.00, oldPrice: 5040.00, img: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&h=400&fit=crop" }
+                { name: "JBL Flip 6", specs: "20 Вт • IP67 • 12 ч работы", price: 1080.00, oldPrice: 1512.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=JBL+Flip+6" },
+                { name: "Marshall Emberton", specs: "20 Вт • Стерео • 20 ч • Ретро-дизайн", price: 2160.00, oldPrice: 3024.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Marshall+Emberton" },
+                { name: "JBL PartyBox 310", specs: "240 Вт • Караоке • Подсветка • Колеса", price: 3600.00, oldPrice: 5040.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=JBL+PartyBox+310" }
             ]
         },
         {
             category: "Телевизоры",
             products: [
-                { name: "POLARLine 32\"", specs: "32\" • HD • Smart TV • Wi-Fi", price: 982.49, oldPrice: 1375.49, img: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600&h=400&fit=crop" },
-                { name: "Xiaomi TV A Pro 43\"", specs: "43\" • 4K • Android TV • 60 Гц", price: 2248.20, oldPrice: 3147.48, img: "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&h=400&fit=crop" },
-                { name: "Blaupunkt 55\"", specs: "55\" • 4K • QLED • 120 Гц • Dolby", price: 1978.20, oldPrice: 2769.48, img: "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=600&h=400&fit=crop" }
+                { name: "POLARLine 32\"", specs: "32\" • HD • Smart TV • Wi-Fi", price: 982.49, oldPrice: 1375.49, img: "https://placehold.co/600x400/1e293b/94a3b8?text=POLARLine+32" },
+                { name: "Xiaomi TV A Pro 43\"", specs: "43\" • 4K • Android TV • 60 Гц", price: 2248.20, oldPrice: 3147.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Xiaomi+TV+A+Pro+43" },
+                { name: "Blaupunkt 55\"", specs: "55\" • 4K • QLED • 120 Гц • Dolby", price: 1978.20, oldPrice: 2769.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Blaupunkt+55" }
             ]
         },
         {
             category: "Яндекс Станции",
             products: [
-                { name: "Станция Мини 3 Про", specs: "Алиса • Zigbee • NFC", price: 988.20, oldPrice: 1383.48, img: "https://images.unsplash.com/photo-1543512214-318c7553f230?w=600&h=400&fit=crop" },
-                { name: "Яндекс Станция 3", specs: "Алиса • Мощный звук • Хаб", price: 1978.20, oldPrice: 2769.48, img: "https://images.unsplash.com/photo-1518444065439-e933c06ce9cd?w=600&h=400&fit=crop" },
-                { name: "Станция Дуо Макс", specs: "Экран • Алиса • Видеозвонки", price: 3447.36, oldPrice: 4826.30, img: "https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=600&h=400&fit=crop" }
+                { name: "Станция Мини 3 Про", specs: "Алиса • Zigbee • NFC", price: 988.20, oldPrice: 1383.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Станция+Мини+3+Про" },
+                { name: "Яндекс Станция 3", specs: "Алиса • Мощный звук • Хаб", price: 1978.20, oldPrice: 2769.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Яндекс+Станция+3" },
+                { name: "Станция Дуо Макс", specs: "Экран • Алиса • Видеозвонки", price: 3447.36, oldPrice: 4826.30, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Станция+Дуо+Макс" }
             ]
         },
         {
             category: "Морозильные лари",
             products: [
-                { name: "Kraufen CF-198", specs: "198 л • Глухая крышка • Класс A+", price: 1774.78, oldPrice: 2484.69, img: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=600&h=400&fit=crop" },
-                { name: "Willmark CF-390IDG", specs: "310 л • Прозрачная крышка • Класс A+", price: 2202.30, oldPrice: 3083.22, img: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600&h=400&fit=crop" },
-                { name: "Haier 516L", specs: "516 л • Две корзины • Глухая крышка", price: 3376.64, oldPrice: 4727.30, img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600&h=400&fit=crop" }
+                { name: "Kraufen CF-198", specs: "198 л • Глухая крышка • Класс A+", price: 1774.78, oldPrice: 2484.69, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Kraufen+CF-198" },
+                { name: "Willmark CF-390IDG", specs: "310 л • Прозрачная крышка • Класс A+", price: 2202.30, oldPrice: 3083.22, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Willmark+CF-390IDG" },
+                { name: "Haier 516L", specs: "516 л • Две корзины • Глухая крышка", price: 3376.64, oldPrice: 4727.30, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Haier+516L" }
             ]
         },
         {
             category: "Компрессоры",
             products: [
-                { name: "Brado IBL3100V", specs: "Ресивер 100 л • 3100 л/мин • 8 бар", price: 2248.92, oldPrice: 3148.49, img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&h=400&fit=crop" },
-                { name: "Denzel DLP-3000", specs: "Ресивер 50 л • 3000 л/мин • 8 бар", price: 2110.68, oldPrice: 2954.95, img: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=600&h=400&fit=crop" },
-                { name: "Patriot KRX 420", specs: "Ресивер 100 л • 420 л/мин • 8 бар", price: 3362.76, oldPrice: 4707.86, img: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop" }
+                { name: "Brado IBL3100V", specs: "Ресивер 100 л • 3100 л/мин • 8 бар", price: 2248.92, oldPrice: 3148.49, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Brado+IBL3100V" },
+                { name: "Denzel DLP-3000", specs: "Ресивер 50 л • 3000 л/мин • 8 бар", price: 2110.68, oldPrice: 2954.95, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Denzel+DLP-3000" },
+                { name: "Patriot KRX 420", specs: "Ресивер 100 л • 420 л/мин • 8 бар", price: 3362.76, oldPrice: 4707.86, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Patriot+KRX+420" }
             ]
         },
         {
             category: "Аэрогрили",
             products: [
-                { name: "Redmond AG1903", specs: "1700 Вт • 6 л • 12 программ", price: 1080.00, oldPrice: 1512.00, img: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600&h=400&fit=crop" },
-                { name: "Kitfort KT-2247", specs: "2000 Вт • 8 л • Сенсор", price: 1440.00, oldPrice: 2016.00, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
-                { name: "Pioneer SM520D", specs: "2600 Вт • 10 л • Две чаши", price: 1800.00, oldPrice: 2520.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
+                { name: "Redmond AG1903", specs: "1700 Вт • 6 л • 12 программ", price: 1080.00, oldPrice: 1512.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Redmond+AG1903" },
+                { name: "Kitfort KT-2247", specs: "2000 Вт • 8 л • Сенсор", price: 1440.00, oldPrice: 2016.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Kitfort+KT-2247" },
+                { name: "Pioneer SM520D", specs: "2600 Вт • 10 л • Две чаши", price: 1800.00, oldPrice: 2520.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Pioneer+SM520D" }
             ]
         },
         {
             category: "Фотоаппараты",
             products: [
-                { name: "Sony ZV-1F", specs: "20 Мп • 4K • Поворотный экран", price: 3868.20, oldPrice: 5415.48, img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop" },
-                { name: "Canon EOS R50", specs: "24 Мп • 4K • APS-C", price: 5292.00, oldPrice: 7408.80, img: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&h=400&fit=crop" },
-                { name: "Nikon Z30", specs: "20 Мп • 4K • Компактный", price: 6228.00, oldPrice: 8719.20, img: "https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=600&h=400&fit=crop" }
+                { name: "Sony ZV-1F", specs: "20 Мп • 4K • Поворотный экран", price: 3868.20, oldPrice: 5415.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Sony+ZV-1F" },
+                { name: "Canon EOS R50", specs: "24 Мп • 4K • APS-C", price: 5292.00, oldPrice: 7408.80, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Canon+EOS+R50" },
+                { name: "Nikon Z30", specs: "20 Мп • 4K • Компактный", price: 6228.00, oldPrice: 8719.20, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Nikon+Z30" }
             ]
         },
         {
             category: "Игровые приставки",
             products: [
-                { name: "Xbox Series X", specs: "4K • 1 ТБ SSD • 120 fps", price: 2700.00, oldPrice: 3780.00, img: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=600&h=400&fit=crop" },
-                { name: "PlayStation 5 Slim", specs: "4K • 1 ТБ SSD • DualSense", price: 5116.28, oldPrice: 7162.79, img: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&h=400&fit=crop" },
-                { name: "PlayStation 5 Pro", specs: "8K • 2 ТБ SSD • 120 fps", price: 5400.00, oldPrice: 7560.00, img: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&h=400&fit=crop" }
+                { name: "Xbox Series X", specs: "4K • 1 ТБ SSD • 120 fps", price: 2700.00, oldPrice: 3780.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Xbox+Series+X" },
+                { name: "PlayStation 5 Slim", specs: "4K • 1 ТБ SSD • DualSense", price: 5116.28, oldPrice: 7162.79, img: "https://placehold.co/600x400/1e293b/94a3b8?text=PlayStation+5+Slim" },
+                { name: "PlayStation 5 Pro", specs: "8K • 2 ТБ SSD • 120 fps", price: 5400.00, oldPrice: 7560.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=PlayStation+5+Pro" }
             ]
         },
         {
             category: "Мясорубки",
             products: [
-                { name: "Aresa AR-3803", specs: "2000 Вт • Овощерезка • Реверс", price: 1031.40, oldPrice: 1443.96, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" },
-                { name: "Bosch MFWS840M", specs: "2000 Вт • Металл • 3 решетки", price: 2340.00, oldPrice: 3276.00, img: "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=600&h=400&fit=crop" },
-                { name: "Panasonic MK-GX1710", specs: "1700 Вт • Реверс • Металл. корпус", price: 989.82, oldPrice: 1385.75, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop" }
+                { name: "Aresa AR-3803", specs: "2000 Вт • Овощерезка • Реверс", price: 1031.40, oldPrice: 1443.96, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Aresa+AR-3803" },
+                { name: "Bosch MFWS840M", specs: "2000 Вт • Металл • 3 решетки", price: 2340.00, oldPrice: 3276.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Bosch+MFWS840M" },
+                { name: "Panasonic MK-GX1710", specs: "1700 Вт • Реверс • Металл. корпус", price: 989.82, oldPrice: 1385.75, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Panasonic+MK-GX1710" }
             ]
         },
         {
             category: "Кухонные комбайны",
             products: [
-                { name: "Sencor STM 3780GG", specs: "1200 Вт • 5 л • Нерж. сталь", price: 1600.20, oldPrice: 2240.28, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
-                { name: "Bosch MUM59N26CB", specs: "1000 Вт • 3.9 л • 7 насадок", price: 3418.20, oldPrice: 4785.48, img: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&h=400&fit=crop" },
-                { name: "Bosch MUM9BX5S22", specs: "1500 Вт • 5.5 л • Планетарное", price: 4541.40, oldPrice: 6357.96, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" }
+                { name: "Sencor STM 3780GG", specs: "1200 Вт • 5 л • Нерж. сталь", price: 1600.20, oldPrice: 2240.28, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Sencor+STM+3780GG" },
+                { name: "Bosch MUM59N26CB", specs: "1000 Вт • 3.9 л • 7 насадок", price: 3418.20, oldPrice: 4785.48, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Bosch+MUM59N26CB" },
+                { name: "Bosch MUM9BX5S22", specs: "1500 Вт • 5.5 л • Планетарное", price: 4541.40, oldPrice: 6357.96, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Bosch+MUM9BX5S22" }
             ]
         },
         {
             category: "Соковыжималки",
             products: [
-                { name: "Bosch MES3500", specs: "700 Вт • 1.25 л • Центробежная", price: 1260.00, oldPrice: 1764.00, img: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&h=400&fit=crop" },
-                { name: "Bosch MES4010", specs: "1200 Вт • 1.5 л • Отверстие 84 мм", price: 2362.63, oldPrice: 3307.68, img: "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=600&h=400&fit=crop" },
-                { name: "Профессиональная", specs: "Шнековая • 0.37 кВт • 60 об/мин", price: 2700.00, oldPrice: 3780.00, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" }
+                { name: "Bosch MES3500", specs: "700 Вт • 1.25 л • Центробежная", price: 1260.00, oldPrice: 1764.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Bosch+MES3500" },
+                { name: "Bosch MES4010", specs: "1200 Вт • 1.5 л • Отверстие 84 мм", price: 2362.63, oldPrice: 3307.68, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Bosch+MES4010" },
+                { name: "Профессиональная", specs: "Шнековая • 0.37 кВт • 60 об/мин", price: 2700.00, oldPrice: 3780.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Профессиональная+соковыжималка" }
             ]
         },
         {
             category: "Хлебопечки",
             products: [
-                { name: "Moulinex OW210", specs: "650 Вт • 12 программ • 1000 г", price: 1112.40, oldPrice: 1557.36, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop" },
-                { name: "Moulinex OW240E30", specs: "720 Вт • 15 программ • 1000 г", price: 1367.12, oldPrice: 1913.97, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
-                { name: "Moulinex La Fournee", specs: "900 Вт • 17 программ • 1050 г", price: 1620.00, oldPrice: 2268.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
+                { name: "Moulinex OW210", specs: "650 Вт • 12 программ • 1000 г", price: 1112.40, oldPrice: 1557.36, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Moulinex+OW210" },
+                { name: "Moulinex OW240E30", specs: "720 Вт • 15 программ • 1000 г", price: 1367.12, oldPrice: 1913.97, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Moulinex+OW240E30" },
+                { name: "Moulinex La Fournee", specs: "900 Вт • 17 программ • 1050 г", price: 1620.00, oldPrice: 2268.00, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Moulinex+La+Fournee" }
             ]
         },
         {
             category: "Посудомоечные машины",
             products: [
-                { name: "Kraufen BDW-3602S", specs: "12 компл. • 60 см • Класс A++", price: 1242.00, oldPrice: 1738.80, img: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&h=400&fit=crop" },
-                { name: "Evelux BD 6001", specs: "12 компл. • Встраиваемая • 60 см", price: 2424.19, oldPrice: 3393.87, img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" },
-                { name: "Beko BDFN15421S", specs: "14 компл. • Луч на полу • Класс A++", price: 4017.60, oldPrice: 5624.64, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=400&fit=crop" }
+                { name: "Kraufen BDW-3602S", specs: "12 компл. • 60 см • Класс A++", price: 1242.00, oldPrice: 1738.80, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Kraufen+BDW-3602S" },
+                { name: "Evelux BD 6001", specs: "12 компл. • Встраиваемая • 60 см", price: 2424.19, oldPrice: 3393.87, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Evelux+BD+6001" },
+                { name: "Beko BDFN15421S", specs: "14 компл. • Луч на полу • Класс A++", price: 4017.60, oldPrice: 5624.64, img: "https://placehold.co/600x400/1e293b/94a3b8?text=Beko+BDFN15421S" }
             ]
         }
     ];
 
-    // Функция расчета платежа (скрытая от пользователя)
     function calcPayment(amount) {
         const rate = 17.7 / 100 / 12;
         const months = 60;
@@ -593,7 +585,6 @@
         return val.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' BYN';
     }
 
-    // Отрисовка каталога
     function render() {
         const catalog = document.getElementById('catalog');
         const nav = document.getElementById('categoryNav');
@@ -601,7 +592,6 @@
         let navHtml = '';
 
         catalogData.forEach((cat, index) => {
-            // Навигация
             navHtml += `<a href="#cat-${index}" class="category-pill">${cat.category}</a>`;
 
             html += `<section class="category-section fade-up" id="cat-${index}">
@@ -641,7 +631,6 @@
         catalog.innerHTML = html;
         nav.innerHTML = navHtml;
 
-        // Плавный скролл по клику
         document.querySelectorAll('.category-pill').forEach(pill => {
             pill.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -650,7 +639,6 @@
             });
         });
 
-        // Анимация появления
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -662,7 +650,6 @@
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
     }
 
-    // Анимация листопада
     function createLeaves() {
         const container = document.getElementById('falling-leaves');
         const items = ['🍁', '🍂', '🍃', '💰', '💳'];
@@ -687,9 +674,8 @@
         }
     }
 
-    // Таймер на 14 часов с цикличным сбросом
     function startTimer() {
-        let totalSeconds = 14 * 60 * 60; // 14 часов в секундах
+        let totalSeconds = 14 * 60 * 60;
 
         const hoursEl = document.getElementById('hours');
         const minutesEl = document.getElementById('minutes');
@@ -697,7 +683,7 @@
 
         setInterval(() => {
             if (totalSeconds <= 0) {
-                totalSeconds = 14 * 60 * 60; // Сброс обратно на 14 часов
+                totalSeconds = 14 * 60 * 60;
             }
 
             totalSeconds--;
@@ -712,7 +698,6 @@
         }, 1000);
     }
 
-    // Запуск
     document.addEventListener('DOMContentLoaded', () => {
         render();
         createLeaves();
