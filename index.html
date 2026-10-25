@@ -3,60 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Автобнп — Техника и Электроника</title>
+    <title>Автобнп — Листопад скидок</title>
+    <!-- Подключение современных шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --accent: #10b981;
-            --bg-color: #f8fafc;
-            --text-main: #0f172a;
+            --bg-color: #f4f6f9;
+            --text-dark: #0f172a;
             --text-muted: #64748b;
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --accent-green: #10b981;
+            --accent-green-dark: #047857;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --border-radius: 24px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Manrope', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
-            color: var(--text-main);
-            min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Анимированный фон (листопад акций) */
-        #falling-leaves {
+        /* --- Анимированный фон --- */
+        #animation-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
         }
 
-        .leaf {
+        .floating-item {
             position: absolute;
-            top: -50px;
-            font-size: 24px;
-            opacity: 0.6;
+            top: -10vh;
+            opacity: 0;
             animation: fall linear infinite;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: rgba(16, 185, 129, 0.15); /* Полупрозрачный зеленый для SALE */
+            text-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .floating-item.leaf {
+            font-size: 2rem;
+            color: rgba(245, 158, 11, 0.2); /* Оранжевый для листьев */
         }
 
         @keyframes fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
+        /* --- Контейнер --- */
         .container {
             max-width: 1440px;
             margin: 0 auto;
@@ -65,359 +75,396 @@
             z-index: 1;
         }
 
+        /* --- Современная шапка --- */
         header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            padding: 40px 30px;
-            border-radius: 24px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.25);
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            border-radius: 32px;
+            padding: 60px 40px;
             text-align: center;
-            backdrop-filter: blur(10px);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+            margin-bottom: 30px;
+        }
+
+        /* Свечение на фоне шапки */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: 50%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(0,0,0,0) 70%);
+            transform: translateX(-50%);
+            border-radius: 50%;
         }
 
         header h1 {
-            font-size: 2.8rem;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 4rem;
             font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 10px;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
         }
 
         header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            font-weight: 500;
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
-        .finance-banner {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            padding: 20px 30px;
-            margin-bottom: 40px;
-            display: flex;
+        /* Плашка с кредитом */
+        .finance-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 24px;
+            border-radius: 50px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
             font-weight: 600;
-            color: #1e40af;
-        }
-
-        .finance-banner .badge {
-            background: #dbeafe;
-            padding: 8px 16px;
-            border-radius: 30px;
             font-size: 0.95rem;
         }
 
+        .finance-badge span { color: #34d399; }
+
+        /* --- Категории и сетка --- */
         .category-section {
             margin-bottom: 50px;
         }
 
         .category-title {
+            font-family: 'Unbounded', sans-serif;
             font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            color: #1e293b;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
+            color: var(--text-dark);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
 
         .category-title::before {
             content: "";
-            display: inline-block;
-            width: 8px;
-            height: 28px;
+            display: block;
+            width: 12px;
+            height: 32px;
             background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
+            gap: 30px;
         }
 
+        /* --- Карточка товара --- */
         .product-card {
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 24px;
-            overflow: hidden;
+            border-radius: var(--border-radius);
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255,255,255,1);
         }
 
         .product-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-            background: #ffffff;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 240px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f1f5f9;
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .product-image {
             width: 100%;
-            height: 240px;
+            height: 100%;
             object-fit: cover;
-            background: #f1f5f9;
-            border-bottom: 1px solid #e2e8f0;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
         }
 
         .product-info {
-            padding: 24px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            padding: 0 8px;
         }
 
         .product-name {
-            font-size: 1.15rem;
-            font-weight: 700;
-            line-height: 1.4;
+            font-size: 1.1rem;
+            font-weight: 800;
+            line-height: 1.3;
             margin-bottom: 8px;
-            color: #0f172a;
+            color: var(--text-dark);
         }
 
         .product-specs {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             line-height: 1.5;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             flex-grow: 1;
         }
 
-        .price-block {
+        .price-container {
+            display: flex;
+            flex-direction: column;
             margin-bottom: 15px;
         }
 
         .old-price {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #94a3b8;
             text-decoration: line-through;
-            margin-bottom: 4px;
-            display: block;
-            font-weight: 500;
+            font-weight: 600;
+            margin-bottom: 2px;
         }
 
         .current-price {
-            font-size: 1.8rem;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.6rem;
             font-weight: 800;
-            color: #0f172a;
-            letter-spacing: -0.5px;
+            color: var(--text-dark);
         }
 
+        /* --- Блок оплаты --- */
         .monthly-payment {
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            border: 1px solid #a7f3d0;
+            background: #ecfdf5;
             border-radius: 16px;
-            padding: 15px;
+            padding: 16px;
             text-align: center;
+            border: 1px solid #a7f3d0;
             margin-top: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .monthly-payment::before {
+            content: 'Выгодно';
+            position: absolute;
+            top: 0; right: 0;
+            background: #10b981;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-bottom-left-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .monthly-label {
             font-size: 0.85rem;
-            color: #047857;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: var(--accent-green-dark);
+            font-weight: 700;
             margin-bottom: 4px;
         }
 
         .monthly-value {
-            font-size: 1.6rem;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.5rem;
             font-weight: 800;
-            color: #059669;
+            color: var(--accent-green);
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 4px;
         }
 
         .monthly-value span {
-            font-size: 1rem;
-            font-weight: 600;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent-green-dark);
         }
 
+        /* --- Подвал --- */
         footer {
             text-align: center;
-            padding: 40px;
+            padding: 40px 20px;
             color: var(--text-muted);
             font-size: 0.9rem;
-            border-top: 1px solid #e2e8f0;
             margin-top: 40px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 24px;
+            border-top: 1px solid #e2e8f0;
         }
 
+        /* --- Мобильная адаптация --- */
         @media (max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            .product-grid { grid-template-columns: 1fr; }
-            .finance-banner { flex-direction: column; gap: 10px; text-align: center; }
-            .product-image { height: 200px; }
-            .current-price { font-size: 1.5rem; }
-            .monthly-value { font-size: 1.4rem; }
+            header { padding: 40px 20px; border-radius: 24px; }
+            header h1 { font-size: 2.2rem; }
+            header p { font-size: 1rem; }
+            .product-grid { grid-template-columns: 1fr; gap: 20px; }
+            .image-wrapper { height: 200px; }
+            .current-price { font-size: 1.4rem; }
+            .monthly-value { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
 
-<!-- Анимированный фон -->
-<div id="falling-leaves"></div>
+<!-- Фон с листопадом и скидками -->
+<div id="animation-bg"></div>
 
 <div class="container">
+    <!-- Новая шапка -->
     <header>
-        <h1>Автобнп</h1>
-        <p>Бытовая техника и электроника. Тренды 2026 года.</p>
+        <h1>Листопад скидок</h1>
+        <p>Премиальная бытовая техника и электроника. Успейте обновить дом по лучшим ценам сезона.</p>
+        <div class="finance-badge">
+            <div>💳 Рассрочка <span>17.7%</span> годовых</div>
+            <div>на 60 месяцев</div>
+        </div>
     </header>
-
-    <div class="finance-banner">
-        <div class="badge">💳 Кредит 17.7% годовых</div>
-        <div>на 60 месяцев</div>
-        <div>Быстрое одобрение</div>
-    </div>
 
     <main id="catalog"></main>
 
     <footer>
         <p>© 2026 Автобнп. Все права защищены.</p>
-        <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">Расчет платежа является предварительным. Итоговые условия определяются банком.</p>
+        <p style="margin-top: 8px; font-size: 0.8rem; opacity: 0.7;">Расчет платежа является предварительным.</p>
     </footer>
 </div>
 
 <script>
-    // Данные каталога (23 категории по 3 товара)
+    // Данные каталога (23 категории)
     const catalogData = [
-        // 1. Холодильники
         {
             category: "Холодильники",
             products: [
-                { name: "ATLANT ХМ 4425-000-N", specs: "Общий объем 400 л • No Frost • Класс A+ • Высота 206 см", price: 2770.20, oldPrice: 3878.28, img: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=600&h=400&fit=crop" },
-                { name: "ATLANT ХМ 4621-181", specs: "Общий объем 360 л • No Frost • Класс A++ • Нижняя морозильная камера", price: 2763.00, oldPrice: 3868.20, img: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600&h=400&fit=crop" },
-                { name: "Hyundai CT10021H", specs: "Общий объем 85 л • Капельная система • Класс A+ • Компактный", price: 1077.35, oldPrice: 1508.29, img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600&h=400&fit=crop" }
+                { name: "ATLANT ХМ 4425-000-N", specs: "400 л • No Frost • Класс A+ • Высота 206 см", price: 2770.20, oldPrice: 3878.28, img: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=600&h=400&fit=crop" },
+                { name: "ATLANT ХМ 4621-181", specs: "360 л • No Frost • Класс A++ • Нижняя морозилка", price: 2763.00, oldPrice: 3868.20, img: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600&h=400&fit=crop" },
+                { name: "Hyundai CT10021H", specs: "85 л • Капельная система • Класс A+ • Компактный", price: 1077.35, oldPrice: 1508.29, img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600&h=400&fit=crop" }
             ]
         },
-        // 2. Стиральные машины
         {
             category: "Стиральные машины",
             products: [
-                { name: "ATLANT СМА 70С1210-00", specs: "Загрузка 7 кг • Отжим 1200 об/мин • Класс A++ • Глубина 40 см", price: 2038.25, oldPrice: 2853.55, img: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&h=400&fit=crop" },
-                { name: "Samsung WW70AG4S21VELD", specs: "Загрузка 7 кг • Отжим 1200 об/мин • Класс A+++ • Пар", price: 3166.20, oldPrice: 4432.68, img: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=600&h=400&fit=crop" },
-                { name: "Evelux EW 47121", specs: "Загрузка 7 кг • Отжим 1200 об/мин • Класс A+ • 15 программ", price: 1260.00, oldPrice: 1764.00, img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop" }
+                { name: "ATLANT СМА 70С1210-00", specs: "7 кг • Отжим 1200 • Класс A++ • Глубина 40 см", price: 2038.25, oldPrice: 2853.55, img: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&h=400&fit=crop" },
+                { name: "Samsung WW70AG4S21VELD", specs: "7 кг • Отжим 1200 • Класс A+++ • Пар", price: 3166.20, oldPrice: 4432.68, img: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=600&h=400&fit=crop" },
+                { name: "Evelux EW 47121", specs: "7 кг • Отжим 1200 • Класс A+ • 15 программ", price: 1260.00, oldPrice: 1764.00, img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop" }
             ]
         },
-        // 3. Смартфоны
         {
             category: "Смартфоны",
             products: [
-                { name: "POCO M8 5G", specs: "8 ГБ ОЗУ • 256 ГБ • 6.6\" 90 Гц • 50 Мп • 5G", price: 1726.20, oldPrice: 2416.68, img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop" },
-                { name: "Samsung Galaxy A57 5G", specs: "8 ГБ ОЗУ • 256 ГБ • 6.5\" Super AMOLED • 64 Мп • 5G", price: 3058.20, oldPrice: 4281.48, img: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&h=400&fit=crop" },
-                { name: "Xiaomi Redmi Note 17 Pro Max", specs: "8 ГБ ОЗУ • 512 ГБ • 6.7\" AMOLED • 108 Мп • 5G", price: 4138.20, oldPrice: 5793.48, img: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop" }
+                { name: "POCO M8 5G", specs: "8/256 ГБ • 6.6\" 90 Гц • 50 Мп • 5G", price: 1726.20, oldPrice: 2416.68, img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop" },
+                { name: "Samsung Galaxy A57 5G", specs: "8/256 ГБ • 6.5\" AMOLED • 64 Мп • 5G", price: 3058.20, oldPrice: 4281.48, img: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&h=400&fit=crop" },
+                { name: "Xiaomi Redmi Note 17 Pro Max", specs: "8/512 ГБ • 6.7\" AMOLED • 108 Мп • 5G", price: 4138.20, oldPrice: 5793.48, img: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop" }
             ]
         },
-        // 4. Ноутбуки
         {
             category: "Ноутбуки",
             products: [
-                { name: "Lenovo IdeaPad Slim 3", specs: "15.6\" • AMD Ryzen 5 • 16 ГБ ОЗУ • 512 ГБ SSD • Без ОС", price: 3942.11, oldPrice: 5518.95, img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop" },
-                { name: "Maibenben Medio M15D", specs: "15.6\" • Intel Core i5 • 16 ГБ ОЗУ • 512 ГБ SSD • Windows 11 Pro", price: 4158.22, oldPrice: 5821.51, img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop" },
-                { name: "Horizont H-Book 15 IPK2", specs: "15.6\" • Intel Core i7 • 16 ГБ ОЗУ • 512 ГБ SSD • Windows 11 Pro", price: 2817.99, oldPrice: 3945.19, img: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=400&fit=crop" }
+                { name: "Lenovo IdeaPad Slim 3", specs: "15.6\" • Ryzen 5 • 16 ГБ • 512 ГБ SSD • Без ОС", price: 3942.11, oldPrice: 5518.95, img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop" },
+                { name: "Maibenben Medio M15D", specs: "15.6\" • Core i5 • 16 ГБ • 512 ГБ SSD • Win 11 Pro", price: 4158.22, oldPrice: 5821.51, img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop" },
+                { name: "Horizont H-Book 15 IPK2", specs: "15.6\" • Core i7 • 16 ГБ • 512 ГБ SSD • Win 11 Pro", price: 2817.99, oldPrice: 3945.19, img: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=400&fit=crop" }
             ]
         },
-        // 5. Компьютеры
         {
             category: "Компьютеры",
             products: [
-                { name: "N-Tech King Office M", specs: "Intel Pentium G5400 • 8 ГБ ОЗУ • 240 ГБ SSD + 1 ТБ HDD", price: 6246.00, oldPrice: 8744.40, img: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=400&fit=crop" },
-                { name: "Игровой ПК 3C121FD", specs: "AMD Ryzen 5 • 16 ГБ ОЗУ • 512 ГБ SSD • Видеокарта RTX", price: 6300.00, oldPrice: 8820.00, img: "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&h=400&fit=crop" },
-                { name: "MultiOffice 7R57D", specs: "Intel Core i5 • 16 ГБ ОЗУ • 512 ГБ SSD • Windows 11 • 27\" монитор", price: 7174.80, oldPrice: 10044.72, img: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=400&fit=crop" }
+                { name: "N-Tech King Office M", specs: "Pentium G5400 • 8 ГБ • 240 ГБ SSD + 1 ТБ HDD", price: 6246.00, oldPrice: 8744.40, img: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=400&fit=crop" },
+                { name: "Игровой ПК 3C121FD", specs: "Ryzen 5 • 16 ГБ • 512 ГБ SSD • RTX", price: 6300.00, oldPrice: 8820.00, img: "https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&h=400&fit=crop" },
+                { name: "MultiOffice 7R57D", specs: "Core i5 • 16 ГБ • 512 ГБ SSD • Win 11 • 27\" Монитор", price: 7174.80, oldPrice: 10044.72, img: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=400&fit=crop" }
             ]
         },
-        // 6. Вертикальные пылесосы
         {
             category: "Вертикальные пылесосы",
             products: [
-                { name: "Redkey P9", specs: "Беспроводной • Мощность 150 Вт • Контейнер 0.5 л • Телескопическая труба", price: 945.00, oldPrice: 1323.00, img: "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&h=400&fit=crop" },
-                { name: "Dreame G10 Pro", specs: "Сухая и влажная уборка • 250 Вт • Автоочистка базы", price: 1168.20, oldPrice: 1635.48, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
-                { name: "Bosch BCS611AM", specs: "Беспроводной • 18 В • Время работы 40 мин • Контейнер 0.4 л", price: 2100.00, oldPrice: 2940.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
+                { name: "Redkey P9", specs: "Беспроводной • 150 Вт • Бак 0.5 л • Телескоп. труба", price: 945.00, oldPrice: 1323.00, img: "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&h=400&fit=crop" },
+                { name: "Dreame G10 Pro", specs: "Сухая/влажная уборка • 250 Вт • Автоочистка", price: 1168.20, oldPrice: 1635.48, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
+                { name: "Bosch BCS611AM", specs: "18 В • 40 мин работы • Бак 0.4 л", price: 2100.00, oldPrice: 2940.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
             ]
         },
-        // 7. Роботы-пылесосы
         {
             category: "Роботы-пылесосы",
             products: [
-                { name: "Dreame Robot Vacuum F21", specs: "Лазерная навигация • 630 Па • Влажная уборка • 3200 мАч", price: 1134.00, oldPrice: 1587.60, img: "https://images.unsplash.com/photo-1589820296144-160a6c3b0b53?w=600&h=400&fit=crop" },
-                { name: "Roborock Qrevo Curv", specs: "Автоматическая очистка базы • 10000 Па • Лидар", price: 5288.58, oldPrice: 7404.01, img: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600&h=400&fit=crop" },
-                { name: "Dreame X50 Master", specs: "Флагман • 20000 Па • Горячая мойка • Выдвижной лидар", price: 7828.36, oldPrice: 10959.71, img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&h=400&fit=crop" }
+                { name: "Dreame Robot Vacuum F21", specs: "Лидар • 630 Па • Влажная уборка • 3200 мАч", price: 1134.00, oldPrice: 1587.60, img: "https://images.unsplash.com/photo-1589820296144-160a6c3b0b53?w=600&h=400&fit=crop" },
+                { name: "Roborock Qrevo Curv", specs: "Автоочистка • 10000 Па • Лидар", price: 5288.58, oldPrice: 7404.01, img: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600&h=400&fit=crop" },
+                { name: "Dreame X50 Master", specs: "20000 Па • Горячая мойка • Выдвижной лидар", price: 7828.36, oldPrice: 10959.71, img: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&h=400&fit=crop" }
             ]
         },
-        // 8. Кофемашины
         {
             category: "Кофемашины",
             products: [
-                { name: "DeLonghi ECP 33.21", specs: "Рожковая • 15 бар • Объем 1 л • Ручной капучинатор", price: 1042.20, oldPrice: 1459.08, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop" },
+                { name: "DeLonghi ECP 33.21", specs: "Рожковая • 15 бар • 1 л • Ручной капучинатор", price: 1042.20, oldPrice: 1459.08, img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop" },
                 { name: "DeLonghi Magnifica Start", specs: "Автоматическая • 15 бар • Встроенная кофемолка", price: 3166.20, oldPrice: 4432.68, img: "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=600&h=400&fit=crop" },
-                { name: "DeLonghi ECAM290.61.B", specs: "Автоматическая • Автоматический капучинатор • Кофемолка", price: 3688.20, oldPrice: 5163.48, img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&h=400&fit=crop" }
+                { name: "DeLonghi ECAM290.61.B", specs: "Автоматическая • Авто-капучинатор • Кофемолка", price: 3688.20, oldPrice: 5163.48, img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&h=400&fit=crop" }
             ]
         },
-        // 9. Плиты
         {
             category: "Плиты",
             products: [
                 { name: "Cezaris ПГ 2150-03", specs: "Газовая • 2 конфорки • Эмаль • 7900 Вт", price: 923.40, oldPrice: 1292.76, img: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&h=400&fit=crop" },
                 { name: "GEFEST 5110-01", specs: "Комбинированная • Электроподжиг • 7600 Вт", price: 1348.67, oldPrice: 1888.14, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" },
-                { name: "Hansa FCCX58221", specs: "Электрическая • 4 конфорки • 9000 Вт • Духовка", price: 2807.71, oldPrice: 3930.80, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop" }
+                { name: "Hansa FCCX58221", specs: "Электрическая • 4 конфорки • 9000 Вт", price: 2807.71, oldPrice: 3930.80, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop" }
             ]
         },
-        // 10. Вытяжки
         {
             category: "Вытяжки",
             products: [
-                { name: "GEFEST ВО 1503", specs: "Купольная • 600 куб. м/ч • Ширина 50 см • Нержавеющая сталь", price: 705.60, oldPrice: 987.84, img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" },
-                { name: "Konigin Beauty 31", specs: "Коробчатая • Медный корпус • 1200 куб. м/ч", price: 2682.00, oldPrice: 3754.80, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=400&fit=crop" },
-                { name: "Faber Value PB", specs: "Купольная • 1000 куб. м/ч • Стекло и сталь", price: 3600.00, oldPrice: 5040.00, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" }
+                { name: "GEFEST ВО 1503", specs: "Купольная • 600 м³/ч • 50 см • Нерж. сталь", price: 705.60, oldPrice: 987.84, img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" },
+                { name: "Konigin Beauty 31", specs: "Коробчатая • Медный корпус • 1200 м³/ч", price: 2682.00, oldPrice: 3754.80, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=400&fit=crop" },
+                { name: "Faber Value PB", specs: "Купольная • 1000 м³/ч • Стекло и сталь", price: 3600.00, oldPrice: 5040.00, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" }
             ]
         },
-        // 11. Bluetooth колонки
         {
             category: "Bluetooth колонки",
             products: [
-                { name: "JBL Flip 6", specs: "20 Вт • Влагозащита IP67 • 12 часов работы", price: 1080.00, oldPrice: 1512.00, img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&h=400&fit=crop" },
-                { name: "Marshall Emberton", specs: "20 Вт • Стерео • 20 часов работы • Ретро-дизайн", price: 2160.00, oldPrice: 3024.00, img: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=600&h=400&fit=crop" },
+                { name: "JBL Flip 6", specs: "20 Вт • IP67 • 12 ч работы", price: 1080.00, oldPrice: 1512.00, img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&h=400&fit=crop" },
+                { name: "Marshall Emberton", specs: "20 Вт • Стерео • 20 ч • Ретро-дизайн", price: 2160.00, oldPrice: 3024.00, img: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=600&h=400&fit=crop" },
                 { name: "JBL PartyBox 310", specs: "240 Вт • Караоке • Подсветка • Колеса", price: 3600.00, oldPrice: 5040.00, img: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&h=400&fit=crop" }
             ]
         },
-        // 12. Телевизоры
         {
             category: "Телевизоры",
             products: [
                 { name: "POLARLine 32\"", specs: "32\" • HD • Smart TV • Wi-Fi", price: 982.49, oldPrice: 1375.49, img: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600&h=400&fit=crop" },
                 { name: "Xiaomi TV A Pro 43\"", specs: "43\" • 4K • Android TV • 60 Гц", price: 2248.20, oldPrice: 3147.48, img: "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&h=400&fit=crop" },
-                { name: "Blaupunkt 55\"", specs: "55\" • 4K • QLED • 120 Гц • Dolby Vision", price: 1978.20, oldPrice: 2769.48, img: "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=600&h=400&fit=crop" }
+                { name: "Blaupunkt 55\"", specs: "55\" • 4K • QLED • 120 Гц • Dolby", price: 1978.20, oldPrice: 2769.48, img: "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=600&h=400&fit=crop" }
             ]
         },
-        // 13. Яндекс Станции
         {
             category: "Яндекс Станции",
             products: [
-                { name: "Яндекс Станция Мини 3 Про", specs: "Умная колонка • Алиса • Zigbee • NFC", price: 988.20, oldPrice: 1383.48, img: "https://images.unsplash.com/photo-1543512214-318c7553f230?w=600&h=400&fit=crop" },
-                { name: "Яндекс Станция 3", specs: "Умная колонка • Алиса • Мощный звук • Хаб", price: 1978.20, oldPrice: 2769.48, img: "https://images.unsplash.com/photo-1518444065439-e933c06ce9cd?w=600&h=400&fit=crop" },
-                { name: "Яндекс Станция Дуо Макс", specs: "Умная колонка • Экран • Алиса • Видеозвонки", price: 3447.36, oldPrice: 4826.30, img: "https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=600&h=400&fit=crop" }
+                { name: "Станция Мини 3 Про", specs: "Алиса • Zigbee • NFC", price: 988.20, oldPrice: 1383.48, img: "https://images.unsplash.com/photo-1543512214-318c7553f230?w=600&h=400&fit=crop" },
+                { name: "Яндекс Станция 3", specs: "Алиса • Мощный звук • Хаб", price: 1978.20, oldPrice: 2769.48, img: "https://images.unsplash.com/photo-1518444065439-e933c06ce9cd?w=600&h=400&fit=crop" },
+                { name: "Станция Дуо Макс", specs: "Экран • Алиса • Видеозвонки", price: 3447.36, oldPrice: 4826.30, img: "https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=600&h=400&fit=crop" }
             ]
         },
-        // 14. Морозильные лари
         {
             category: "Морозильные лари",
             products: [
-                { name: "Kraufen CF-198", specs: "Объем 198 л • Глухая крышка • Класс A+", price: 1774.78, oldPrice: 2484.69, img: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=600&h=400&fit=crop" },
-                { name: "Willmark CF-390IDG", specs: "Объем 310 л • Прозрачная крышка • Класс A+", price: 2202.30, oldPrice: 3083.22, img: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600&h=400&fit=crop" },
-                { name: "Haier 516L", specs: "Объем 516 л • Две корзины • Глухая крышка", price: 3376.64, oldPrice: 4727.30, img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600&h=400&fit=crop" }
+                { name: "Kraufen CF-198", specs: "198 л • Глухая крышка • Класс A+", price: 1774.78, oldPrice: 2484.69, img: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=600&h=400&fit=crop" },
+                { name: "Willmark CF-390IDG", specs: "310 л • Прозрачная крышка • Класс A+", price: 2202.30, oldPrice: 3083.22, img: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600&h=400&fit=crop" },
+                { name: "Haier 516L", specs: "516 л • Две корзины • Глухая крышка", price: 3376.64, oldPrice: 4727.30, img: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=600&h=400&fit=crop" }
             ]
         },
-        // 15. Компрессоры
         {
             category: "Компрессоры",
             products: [
@@ -426,25 +473,22 @@
                 { name: "Patriot KRX 420", specs: "Ресивер 100 л • 420 л/мин • 8 бар", price: 3362.76, oldPrice: 4707.86, img: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop" }
             ]
         },
-        // 16. Аэрогрили
         {
             category: "Аэрогрили",
             products: [
-                { name: "Redmond AG1903", specs: "Мощность 1700 Вт • Объем 6 л • 12 программ", price: 1080.00, oldPrice: 1512.00, img: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600&h=400&fit=crop" },
-                { name: "Kitfort KT-2247", specs: "Мощность 2000 Вт • Объем 8 л • Сенсор", price: 1440.00, oldPrice: 2016.00, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
-                { name: "Pioneer SM520D", specs: "Мощность 2600 Вт • 10 л • Две чаши", price: 1800.00, oldPrice: 2520.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
+                { name: "Redmond AG1903", specs: "1700 Вт • 6 л • 12 программ", price: 1080.00, oldPrice: 1512.00, img: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600&h=400&fit=crop" },
+                { name: "Kitfort KT-2247", specs: "2000 Вт • 8 л • Сенсор", price: 1440.00, oldPrice: 2016.00, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
+                { name: "Pioneer SM520D", specs: "2600 Вт • 10 л • Две чаши", price: 1800.00, oldPrice: 2520.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
             ]
         },
-        // 17. Фотоаппараты
         {
             category: "Фотоаппараты",
             products: [
-                { name: "Sony ZV-1F", specs: "Компакт • 20 Мп • 4K видео • Поворотный экран", price: 3868.20, oldPrice: 5415.48, img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop" },
-                { name: "Canon EOS R50", specs: "Беззеркальный • 24 Мп • 4K • APS-C", price: 5292.00, oldPrice: 7408.80, img: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&h=400&fit=crop" },
-                { name: "Nikon Z30", specs: "Беззеркальный • 20 Мп • 4K • Компактный", price: 6228.00, oldPrice: 8719.20, img: "https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=600&h=400&fit=crop" }
+                { name: "Sony ZV-1F", specs: "20 Мп • 4K • Поворотный экран", price: 3868.20, oldPrice: 5415.48, img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&h=400&fit=crop" },
+                { name: "Canon EOS R50", specs: "24 Мп • 4K • APS-C", price: 5292.00, oldPrice: 7408.80, img: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=600&h=400&fit=crop" },
+                { name: "Nikon Z30", specs: "20 Мп • 4K • Компактный", price: 6228.00, oldPrice: 8719.20, img: "https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=600&h=400&fit=crop" }
             ]
         },
-        // 18. Игровые приставки
         {
             category: "Игровые приставки",
             products: [
@@ -453,34 +497,30 @@
                 { name: "PlayStation 5 Pro", specs: "8K • 2 ТБ SSD • 120 fps", price: 5400.00, oldPrice: 7560.00, img: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&h=400&fit=crop" }
             ]
         },
-        // 19. Мясорубки
         {
             category: "Мясорубки",
             products: [
-                { name: "Aresa AR-3803", specs: "Мощность 2000 Вт • Овощерезка • Реверс", price: 1031.40, oldPrice: 1443.96, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" },
-                { name: "Bosch MFWS840M", specs: "Мощность 2000 Вт • Металл • 3 решетки", price: 2340.00, oldPrice: 3276.00, img: "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=600&h=400&fit=crop" },
-                { name: "Panasonic MK-GX1710", specs: "Мощность 1700 Вт • Реверс • Металлический корпус", price: 989.82, oldPrice: 1385.75, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop" }
+                { name: "Aresa AR-3803", specs: "2000 Вт • Овощерезка • Реверс", price: 1031.40, oldPrice: 1443.96, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" },
+                { name: "Bosch MFWS840M", specs: "2000 Вт • Металл • 3 решетки", price: 2340.00, oldPrice: 3276.00, img: "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=600&h=400&fit=crop" },
+                { name: "Panasonic MK-GX1710", specs: "1700 Вт • Реверс • Металл. корпус", price: 989.82, oldPrice: 1385.75, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=400&fit=crop" }
             ]
         },
-        // 20. Кухонные комбайны
         {
             category: "Кухонные комбайны",
             products: [
-                { name: "Sencor STM 3780GG", specs: "1200 Вт • 5 л • Нержавеющая сталь", price: 1600.20, oldPrice: 2240.28, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
+                { name: "Sencor STM 3780GG", specs: "1200 Вт • 5 л • Нерж. сталь", price: 1600.20, oldPrice: 2240.28, img: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&h=400&fit=crop" },
                 { name: "Bosch MUM59N26CB", specs: "1000 Вт • 3.9 л • 7 насадок", price: 3418.20, oldPrice: 4785.48, img: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&h=400&fit=crop" },
-                { name: "Bosch MUM9BX5S22", specs: "1500 Вт • 5.5 л • Планетарное смешивание", price: 4541.40, oldPrice: 6357.96, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" }
+                { name: "Bosch MUM9BX5S22", specs: "1500 Вт • 5.5 л • Планетарное", price: 4541.40, oldPrice: 6357.96, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" }
             ]
         },
-        // 21. Соковыжималки
         {
             category: "Соковыжималки",
             products: [
                 { name: "Bosch MES3500", specs: "700 Вт • 1.25 л • Центробежная", price: 1260.00, oldPrice: 1764.00, img: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&h=400&fit=crop" },
                 { name: "Bosch MES4010", specs: "1200 Вт • 1.5 л • Отверстие 84 мм", price: 2362.63, oldPrice: 3307.68, img: "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=600&h=400&fit=crop" },
-                { name: "Профессиональная соковыжималка", specs: "Шнековая • 0.37 кВт • 60 об/мин", price: 2700.00, oldPrice: 3780.00, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" }
+                { name: "Профессиональная", specs: "Шнековая • 0.37 кВт • 60 об/мин", price: 2700.00, oldPrice: 3780.00, img: "https://images.unsplash.com/photo-1584990347449-39b4a9c2b5f3?w=600&h=400&fit=crop" }
             ]
         },
-        // 22. Хлебопечки
         {
             category: "Хлебопечки",
             products: [
@@ -489,60 +529,59 @@
                 { name: "Moulinex La Fournee", specs: "900 Вт • 17 программ • 1050 г", price: 1620.00, oldPrice: 2268.00, img: "https://images.unsplash.com/photo-1606851094291-6efae152bb87?w=600&h=400&fit=crop" }
             ]
         },
-        // 23. Посудомоечные машины
         {
             category: "Посудомоечные машины",
             products: [
-                { name: "Kraufen BDW-3602S", specs: "12 комплектов • 60 см • Класс A++", price: 1242.00, oldPrice: 1738.80, img: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&h=400&fit=crop" },
-                { name: "Evelux BD 6001", specs: "12 комплектов • Встраиваемая • 60 см", price: 2424.19, oldPrice: 3393.87, img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" },
-                { name: "Beko BDFN15421S", specs: "14 комплектов • Луч на полу • Класс A++", price: 4017.60, oldPrice: 5624.64, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=400&fit=crop" }
+                { name: "Kraufen BDW-3602S", specs: "12 компл. • 60 см • Класс A++", price: 1242.00, oldPrice: 1738.80, img: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&h=400&fit=crop" },
+                { name: "Evelux BD 6001", specs: "12 компл. • Встраиваемая • 60 см", price: 2424.19, oldPrice: 3393.87, img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop" },
+                { name: "Beko BDFN15421S", specs: "14 компл. • Луч на полу • Класс A++", price: 4017.60, oldPrice: 5624.64, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=400&fit=crop" }
             ]
         }
     ];
 
-    // Функция расчета аннуитетного платежа (17.7% на 60 мес)
-    function calculateMonthlyPayment(amount) {
-        const rate = 17.7 / 100 / 12; // месячная ставка
+    // Расчет аннуитетного платежа (17.7% на 60 мес)
+    function calcPayment(amount) {
+        const rate = 17.7 / 100 / 12;
         const months = 60;
-        const payment = amount * rate * Math.pow(1 + rate, months) / (Math.pow(1 + rate, months) - 1);
-        return payment;
+        return amount * rate * Math.pow(1 + rate, months) / (Math.pow(1 + rate, months) - 1);
     }
 
     // Форматирование валюты
-    function formatMoney(value) {
-        return value.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' BYN';
+    function fmtMoney(val) {
+        return val.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' BYN';
     }
 
-    // Рендер каталога
-    function renderCatalog() {
-        const catalogContainer = document.getElementById('catalog');
+    // Отрисовка каталога
+    function render() {
+        const catalog = document.getElementById('catalog');
         let html = '';
 
-        catalogData.forEach(category => {
+        catalogData.forEach(cat => {
             html += `<section class="category-section">
-                        <h2 class="category-title">${category.category}</h2>
+                        <h2 class="category-title">${cat.category}</h2>
                         <div class="product-grid">`;
 
-            category.products.forEach(product => {
-                const monthlyPayment = calculateMonthlyPayment(product.price);
-                // Заглушка на случай, если картинка не загрузится
-                const fallbackImg = `https://placehold.co/600x400/f1f5f9/64748b?text=${encodeURIComponent(product.name)}`;
+            cat.products.forEach(p => {
+                const monthly = calcPayment(p.price);
+                const fallbackImg = `https://placehold.co/600x400/f1f5f9/64748b?text=${encodeURIComponent(p.name)}`;
 
                 html += `
                     <div class="product-card">
-                        <img src="${product.img}" alt="${product.name}" class="product-image" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImg}';">
+                        <div class="image-wrapper">
+                            <img src="${p.img}" alt="${p.name}" class="product-image" loading="lazy" onerror="this.onerror=null;this.src='${fallbackImg}';">
+                        </div>
                         <div class="product-info">
-                            <h3 class="product-name">${product.name}</h3>
-                            <p class="product-specs">${product.specs}</p>
+                            <h3 class="product-name">${p.name}</h3>
+                            <p class="product-specs">${p.specs}</p>
                             
-                            <div class="price-block">
-                                <span class="old-price">${formatMoney(product.oldPrice)}</span>
-                                <span class="current-price">${formatMoney(product.price)}</span>
+                            <div class="price-container">
+                                <span class="old-price">${fmtMoney(p.oldPrice)}</span>
+                                <span class="current-price">${fmtMoney(p.price)}</span>
                             </div>
 
                             <div class="monthly-payment">
-                                <div class="monthly-label">Всего от</div>
-                                <div class="monthly-value">${monthlyPayment.toFixed(2).replace('.', ',')} <span>BYN/мес</span></div>
+                                <div class="monthly-label">В месяц от</div>
+                                <div class="monthly-value">${monthly.toFixed(2).replace('.', ',')} <span>BYN</span></div>
                             </div>
                         </div>
                     </div>
@@ -552,41 +591,47 @@
             html += `</div></section>`;
         });
 
-        catalogContainer.innerHTML = html;
+        catalog.innerHTML = html;
     }
 
-    // Анимация фона (Листопад)
-    function createFallingLeaves() {
-        const container = document.getElementById('falling-leaves');
-        const symbols = ['🍂', '🍁', '💸', '💵', '💳']; // Символы акций и осени
-        const leafCount = 25;
+    // Генерация анимированного фона (Листопад и Скидки)
+    function createAnimation() {
+        const container = document.getElementById('animation-bg');
+        const items = ['🍁', '🍂', '🍃', 'SALE', '-40%', 'ХИТ'];
+        const count = 30;
 
-        for (let i = 0; i < leafCount; i++) {
-            const leaf = document.createElement('div');
-            leaf.classList.add('leaf');
-            leaf.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        for (let i = 0; i < count; i++) {
+            const el = document.createElement('div');
+            const isLeaf = Math.random() > 0.5;
             
-            // Случайные позиции и тайминги
+            el.classList.add('floating-item');
+            if (isLeaf) {
+                el.classList.add('leaf');
+                el.textContent = items[Math.floor(Math.random() * 3)];
+            } else {
+                el.textContent = items[Math.floor(Math.random() * 3) + 3];
+            }
+            
+            // Случайные параметры падения
             const left = Math.random() * 100;
-            const animationDuration = 10 + Math.random() * 15; // от 10 до 25 секунд
+            const duration = 10 + Math.random() * 20; // 10-30 секунд
             const delay = Math.random() * 15;
-            const size = 16 + Math.random() * 16; // от 16px до 32px
+            const size = isLeaf ? (16 + Math.random() * 20) : (12 + Math.random() * 10);
 
-            leaf.style.left = `${left}%`;
-            leaf.style.animationDuration = `${animationDuration}s`;
-            leaf.style.animationDelay = `${delay}s`;
-            leaf.style.fontSize = `${size}px`;
+            el.style.left = `${left}%`;
+            el.style.animationDuration = `${duration}s`;
+            el.style.animationDelay = `${delay}s`;
+            el.style.fontSize = `${size}px`;
 
-            container.appendChild(leaf);
+            container.appendChild(el);
         }
     }
 
-    // Запуск после загрузки страницы
+    // Запуск
     document.addEventListener('DOMContentLoaded', () => {
-        renderCatalog();
-        createFallingLeaves();
+        render();
+        createAnimation();
     });
 </script>
 </body>
 </html>
-
