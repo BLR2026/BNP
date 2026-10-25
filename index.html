@@ -1428,11 +1428,11 @@
 </script>
 <!-- Конец блока с рулеткой -->
     <!-- ========================================== -->
+<!-- ========================================== -->
 <!-- БЛОК: КНОПКА ЗАЯВКИ И МОДАЛЬНОЕ ОКНО       -->
 <!-- ========================================== -->
 
 <style>
-    /* Плавающая кнопка слева, чтобы не мешать рулетке */
     .request-float-btn {
         position: fixed;
         bottom: 30px;
@@ -1455,7 +1455,6 @@
     }
     .request-float-btn:hover { transform: scale(1.05); }
 
-    /* Оверлей модального окна */
     .request-modal-overlay {
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -1473,7 +1472,6 @@
         opacity: 1;
     }
 
-    /* Само окно */
     .request-modal {
         background: #0f172a;
         border: 1px solid rgba(255,255,255,0.1);
@@ -1515,7 +1513,6 @@
         margin-bottom: 25px;
     }
 
-    /* Инпут телефона */
     .phone-input-group {
         display: flex;
         align-items: center;
@@ -1548,7 +1545,6 @@
     }
     .phone-input-group input::placeholder { color: #475569; letter-spacing: 0; }
 
-    /* Кнопка отправки */
     .request-submit {
         width: 100%;
         padding: 15px;
@@ -1565,25 +1561,23 @@
     .request-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
     .request-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    /* Сообщения об успехе/ошибке */
     .request-status {
         margin-top: 15px;
         font-size: 0.9rem;
         font-weight: 600;
         opacity: 0;
         transition: opacity 0.3s;
+        min-height: 20px;
     }
     .request-status.success { color: #10b981; opacity: 1; }
     .request-status.error { color: #ef4444; opacity: 1; }
 </style>
 
-<!-- Кнопка вызова формы -->
 <button class="request-float-btn" id="openRequestBtn">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
     Оставить заявку
 </button>
 
-<!-- Модальное окно -->
 <div class="request-modal-overlay" id="requestModal">
     <div class="request-modal">
         <button class="request-close" id="closeRequestBtn">&times;</button>
@@ -1593,7 +1587,6 @@
         <form id="requestForm">
             <div class="phone-input-group">
                 <span class="phone-prefix">+375</span>
-                <!-- type="tel" для мобильной клавиатуры, maxlength="9" для ограничения -->
                 <input type="tel" id="phoneInput" placeholder="Введите 9 цифр" maxlength="9" inputmode="numeric" required>
             </div>
             <button type="submit" class="request-submit" id="submitBtn">Отправить</button>
@@ -1612,24 +1605,20 @@
         const submitBtn = document.getElementById('submitBtn');
         const statusMsg = document.getElementById('requestStatus');
 
-        // Открытие/закрытие
         openBtn.addEventListener('click', () => modal.classList.add('active'));
         closeBtn.addEventListener('click', () => modal.classList.remove('active'));
         modal.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.remove('active');
         });
 
-        // Валидация: разрешаем вводить только цифры
         phoneInput.addEventListener('input', (e) => {
             e.target.value = e.target.value.replace(/\D/g, '').slice(0, 9);
         });
 
-        // Обработка отправки формы
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
             const phone = phoneInput.value;
 
-            // Проверка, что введено ровно 9 цифр
             if (phone.length !== 9) {
                 statusMsg.textContent = 'Пожалуйста, введите ровно 9 цифр';
                 statusMsg.className = 'request-status error';
@@ -1640,49 +1629,44 @@
             submitBtn.textContent = 'Отправка...';
             statusMsg.className = 'request-status';
 
-            // !!! ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT !!!
-            const scriptURL = 'ВАША_ССЫЛКА_ИЗ_ШАГА_10';
+            // Вставлена ваша новая ссылка
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxpBCntAApurdfy9HIeIuPhlsz6Y0FhHjwX7ONH6A3nkDeZ4nrHSM-7RtgnjVpMuNzbiA/exec';
+
+            const iframeName = 'hidden_iframe_' + Date.now();
+            const iframe = document.createElement('iframe');
+            iframe.name = iframeName;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+
+            const hiddenPhone = document.createElement('input');
+            hiddenPhone.type = 'hidden';
+            hiddenPhone.name = 'phone';
+            hiddenPhone.value = '+375 ' + phone;
+            form.appendChild(hiddenPhone);
             
-            // Если ссылка не заменена, показываем ошибку для теста
-            if (scriptURL === 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQ10Y1G15AGwDvYheclNGHfh2wHialYeGELdJWlqkAF4qtpJ9W1XAYBkCY1e89-EKhve2Z9SwijtKCmJMb4RzEAS86v4LWZGyWH2BgbZO0Yk9bHACToGV_EHdf4Ag7klFBxEXdstg08HaHT19hUG-xa39MMn3DPtu-bwTCtRDUfuS5ZeZpN_r1PlnMg9do4zYV-LKig4e3YMKm0COXD3OpT32_75GyJCt22ptJiD-6QrL_ZFOLnhu5QqRJor-LHse7tkzKTWwB6qDN2G-JblxzbvYPu0w&lib=MEyf2aVhm6hPEDX-YiA5dQ97W_EUTWjqu') {
-                setTimeout(() => {
-                    statusMsg.textContent = 'Ошибка: Вы не вставили ссылку на Google Script!';
-                    statusMsg.className = 'request-status error';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Отправить';
-                }, 1000);
-                return;
-            }
+            phoneInput.removeAttribute('name');
 
-            // Подготовка данных для отправки
-            const formData = new URLSearchParams();
-            formData.append('phone', '+375 ' + phone); // Добавляем код +375 перед отправкой
+            form.target = iframeName;
+            form.action = scriptURL;
+            form.method = 'POST';
 
-            try {
-                await fetch(scriptURL, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors' // Важно для обхода CORS при отправке на Google Script
-                });
+            form.submit();
 
-                // Так как mode: 'no-cors' не возвращает ответ, мы просто показываем успех
-                statusMsg.textContent = 'Заявка успешно отправлена!';
-                statusMsg.className = 'request-status success';
+            statusMsg.textContent = 'Заявка успешно отправлена!';
+            statusMsg.className = 'request-status success';
+            
+            setTimeout(() => {
                 form.reset();
-                
-                // Закрываем окно через 3 секунды
-                setTimeout(() => {
-                    modal.classList.remove('active');
-                    statusMsg.className = 'request-status';
-                }, 3000);
-
-            } catch (error) {
-                statusMsg.textContent = 'Ошибка отправки. Попробуйте позже.';
-                statusMsg.className = 'request-status error';
-            } finally {
+                phoneInput.value = '';
+                modal.classList.remove('active');
+                statusMsg.className = 'request-status';
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Отправить';
-            }
+                
+                document.body.removeChild(iframe);
+                form.removeChild(hiddenPhone);
+                phoneInput.setAttribute('name', 'phone');
+            }, 2500);
         });
     });
 </script>
