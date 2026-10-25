@@ -3,197 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Автобнп — Листопад скидок</title>
-    <!-- Подключение современных шрифтов -->
+    <title>Листопад скидок в БНП</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Unbounded:wght@500;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #f4f6f9;
-            --text-dark: #0f172a;
-            --text-muted: #64748b;
+            --bg-deep: #050914;
+            --bg-card: rgba(20, 30, 55, 0.6);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-glow: #38bdf8;
             --accent-green: #10b981;
-            --accent-green-dark: #047857;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --border-radius: 24px;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Manrope', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
             overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* --- Анимированный фон --- */
-        #animation-bg {
+        /* --- Живой фон с плавающими градиентами --- */
+        .ambient-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
+            z-index: -1;
             overflow: hidden;
         }
-
-        .floating-item {
+        .ambient-blob {
             position: absolute;
-            top: -10vh;
-            opacity: 0;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .blob-1 { background: #4f46e5; width: 50vw; height: 50vw; top: -10%; left: -10%; }
+        .blob-2 { background: #0ea5e9; width: 40vw; height: 40vw; bottom: -10%; right: -10%; animation-delay: -5s; }
+        .blob-3 { background: #10b981; width: 30vw; height: 30vw; top: 40%; left: 30%; animation-delay: -10s; opacity: 0.2; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* --- Листопад на фоне --- */
+        #falling-leaves {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .leaf {
+            position: absolute; top: -5vh; font-size: 1.5rem; opacity: 0;
             animation: fall linear infinite;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: rgba(16, 185, 129, 0.15); /* Полупрозрачный зеленый для SALE */
-            text-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-
-        .floating-item.leaf {
-            font-size: 2rem;
-            color: rgba(245, 158, 11, 0.2); /* Оранжевый для листьев */
-        }
-
         @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(-5vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
         }
 
-        /* --- Контейнер --- */
         .container {
-            max-width: 1440px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
             z-index: 1;
         }
 
-        /* --- Современная шапка --- */
+        /* --- Шапка (Hero) --- */
         header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            border-radius: 32px;
-            padding: 60px 40px;
+            padding: 80px 20px 60px;
             text-align: center;
-            color: white;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
-            margin-bottom: 30px;
         }
 
-        /* Свечение на фоне шапки */
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: 50%;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(0,0,0,0) 70%);
-            transform: translateX(-50%);
-            border-radius: 50%;
+        .pre-title {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 50px;
+            color: var(--accent-glow);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
 
         header h1 {
             font-family: 'Unbounded', sans-serif;
-            font-size: 4rem;
-            font-weight: 800;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
             line-height: 1.1;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, #fff, #93c5fd);
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            position: relative;
-            z-index: 1;
+            letter-spacing: -2px;
         }
 
-        header p {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+        .header-features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
         }
 
-        /* Плашка с кредитом */
-        .finance-badge {
-            display: inline-flex;
+        .feature-badge {
+            display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            gap: 10px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
             padding: 12px 24px;
             border-radius: 50px;
-            margin-top: 30px;
-            position: relative;
-            z-index: 1;
-            font-weight: 600;
+            font-weight: 500;
             font-size: 0.95rem;
         }
+        .feature-badge svg { width: 20px; height: 20px; fill: var(--accent-glow); }
 
-        .finance-badge span { color: #34d399; }
+        /* --- Таймер --- */
+        .timer-container {
+            margin: 40px auto 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 20px 40px;
+            border-radius: 24px;
+            display: inline-flex;
+            backdrop-filter: blur(10px);
+        }
+        .timer-label { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .timer-clock {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            display: flex;
+            gap: 10px;
+        }
+        .timer-unit { display: flex; flex-direction: column; align-items: center; }
+        .timer-unit span:last-child { font-size: 0.7rem; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 400; margin-top: 5px; }
 
-        /* --- Категории и сетка --- */
-        .category-section {
-            margin-bottom: 50px;
+        /* --- Сетка категорий (Bento Grid) --- */
+        .category-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            scrollbar-width: none;
+        }
+        .category-nav::-webkit-scrollbar { display: none; }
+        .category-pill {
+            white-space: nowrap;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .category-pill:hover, .category-pill.active {
+            background: var(--accent-gradient);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
         }
 
+        .category-section { margin-bottom: 60px; }
         .category-title {
             font-family: 'Unbounded', sans-serif;
             font-size: 1.8rem;
-            font-weight: 600;
-            margin: 40px 0 20px 0;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .category-title::before {
-            content: "";
-            display: block;
-            width: 12px;
-            height: 32px;
-            background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
-            border-radius: 6px;
+            margin-bottom: 25px;
+            color: var(--text-main);
         }
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         /* --- Карточка товара --- */
         .product-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 16px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(255,255,255,1);
+            position: relative;
+            overflow: hidden;
         }
 
         .product-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.1);
         }
 
         .image-wrapper {
             width: 100%;
-            height: 240px;
+            height: 220px;
             border-radius: 16px;
             overflow: hidden;
-            background: #f1f5f9;
+            background: #0f172a;
             margin-bottom: 20px;
             position: relative;
         }
@@ -205,23 +243,20 @@
             transition: transform 0.5s ease;
         }
 
-        .product-card:hover .product-image {
-            transform: scale(1.05);
-        }
+        .product-card:hover .product-image { transform: scale(1.08); }
 
         .product-info {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            padding: 0 8px;
         }
 
         .product-name {
             font-size: 1.1rem;
-            font-weight: 800;
-            line-height: 1.3;
+            font-weight: 600;
+            line-height: 1.4;
             margin-bottom: 8px;
-            color: var(--text-dark);
+            color: var(--text-main);
         }
 
         .product-specs {
@@ -239,114 +274,122 @@
         }
 
         .old-price {
-            font-size: 0.95rem;
-            color: #94a3b8;
+            font-size: 0.9rem;
+            color: var(--text-muted);
             text-decoration: line-through;
-            font-weight: 600;
-            margin-bottom: 2px;
+            font-weight: 500;
+            margin-bottom: 4px;
         }
 
         .current-price {
             font-family: 'Unbounded', sans-serif;
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--text-dark);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
         }
 
         /* --- Блок оплаты --- */
         .monthly-payment {
-            background: #ecfdf5;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             border-radius: 16px;
             padding: 16px;
-            text-align: center;
-            border: 1px solid #a7f3d0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-top: auto;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .monthly-payment::before {
-            content: 'Выгодно';
-            position: absolute;
-            top: 0; right: 0;
-            background: #10b981;
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-bottom-left-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .monthly-label {
-            font-size: 0.85rem;
-            color: var(--accent-green-dark);
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .monthly-value {
             font-family: 'Unbounded', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--accent-green);
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 4px;
-        }
-
-        .monthly-value span {
-            font-family: 'Manrope', sans-serif;
-            font-size: 0.9rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--accent-green-dark);
+            color: var(--accent-green);
         }
+        .monthly-value span { font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; }
 
-        /* --- Подвал --- */
+        /* --- Анимация появления --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
         footer {
             text-align: center;
             padding: 40px 20px;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 40px;
-            border-top: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 60px;
         }
 
-        /* --- Мобильная адаптация --- */
         @media (max-width: 768px) {
-            header { padding: 40px 20px; border-radius: 24px; }
-            header h1 { font-size: 2.2rem; }
-            header p { font-size: 1rem; }
-            .product-grid { grid-template-columns: 1fr; gap: 20px; }
+            header { padding: 50px 15px 30px; }
+            .product-grid { grid-template-columns: 1fr; }
             .image-wrapper { height: 200px; }
-            .current-price { font-size: 1.4rem; }
-            .monthly-value { font-size: 1.3rem; }
+            .timer-clock { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
-<!-- Фон с листопадом и скидками -->
-<div id="animation-bg"></div>
+<!-- Фон -->
+<div class="ambient-bg">
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+</div>
+<div id="falling-leaves"></div>
 
 <div class="container">
-    <!-- Новая шапка -->
-    <header>
-        <h1>Листопад скидок</h1>
-        <p>Премиальная бытовая техника и электроника. Успейте обновить дом по лучшим ценам сезона.</p>
-        <div class="finance-badge">
-            <div>💳 Рассрочка <span>17.7%</span> годовых</div>
-            <div>на 60 месяцев</div>
+    <!-- Шапка -->
+    <header class="fade-up">
+        <div class="pre-title">Сезонная распродажа 2026</div>
+        <h1>Листопад скидок в БНП</h1>
+        
+        <div class="header-features">
+            <div class="feature-badge">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91 2.48.6 4.18 1.57 4.18 3.67 0 1.91-1.42 2.94-3.12 3.4z"/></svg>
+                Оплата частями без первого взноса
+            </div>
+            <div class="feature-badge">
+                <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                Бесплатная доставка до дома
+            </div>
+        </div>
+
+        <!-- Таймер -->
+        <div class="timer-container">
+            <div class="timer-label">До конца акции осталось:</div>
+            <div class="timer-clock" id="countdown">
+                <div class="timer-unit"><span id="hours">14</span><span>часов</span></div>
+                <div>:</div>
+                <div class="timer-unit"><span id="minutes">00</span><span>минут</span></div>
+                <div>:</div>
+                <div class="timer-unit"><span id="seconds">00</span><span>секунд</span></div>
+            </div>
         </div>
     </header>
 
+    <!-- Навигация по категориям -->
+    <div class="category-nav" id="categoryNav"></div>
+
+    <!-- Каталог -->
     <main id="catalog"></main>
 
     <footer>
-        <p>© 2026 Автобнп. Все права защищены.</p>
-        <p style="margin-top: 8px; font-size: 0.8rem; opacity: 0.7;">Расчет платежа является предварительным.</p>
+        <p>© 2026 БНП. Листопад скидок.</p>
+        <p style="margin-top: 8px; font-size: 0.75rem; opacity: 0.6;">Условия оплаты частями и доставки уточняйте у менеджеров.</p>
     </footer>
 </div>
 
@@ -539,14 +582,13 @@
         }
     ];
 
-    // Расчет аннуитетного платежа (17.7% на 60 мес)
+    // Функция расчета платежа (скрытая от пользователя)
     function calcPayment(amount) {
         const rate = 17.7 / 100 / 12;
         const months = 60;
         return amount * rate * Math.pow(1 + rate, months) / (Math.pow(1 + rate, months) - 1);
     }
 
-    // Форматирование валюты
     function fmtMoney(val) {
         return val.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' BYN';
     }
@@ -554,16 +596,21 @@
     // Отрисовка каталога
     function render() {
         const catalog = document.getElementById('catalog');
+        const nav = document.getElementById('categoryNav');
         let html = '';
+        let navHtml = '';
 
-        catalogData.forEach(cat => {
-            html += `<section class="category-section">
+        catalogData.forEach((cat, index) => {
+            // Навигация
+            navHtml += `<a href="#cat-${index}" class="category-pill">${cat.category}</a>`;
+
+            html += `<section class="category-section fade-up" id="cat-${index}">
                         <h2 class="category-title">${cat.category}</h2>
                         <div class="product-grid">`;
 
             cat.products.forEach(p => {
                 const monthly = calcPayment(p.price);
-                const fallbackImg = `https://placehold.co/600x400/f1f5f9/64748b?text=${encodeURIComponent(p.name)}`;
+                const fallbackImg = `https://placehold.co/600x400/1e293b/94a3b8?text=${encodeURIComponent(p.name)}`;
 
                 html += `
                     <div class="product-card">
@@ -592,31 +639,44 @@
         });
 
         catalog.innerHTML = html;
+        nav.innerHTML = navHtml;
+
+        // Плавный скролл по клику
+        document.querySelectorAll('.category-pill').forEach(pill => {
+            pill.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = pill.getAttribute('href');
+                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Анимация появления
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
     }
 
-    // Генерация анимированного фона (Листопад и Скидки)
-    function createAnimation() {
-        const container = document.getElementById('animation-bg');
-        const items = ['🍁', '🍂', '🍃', 'SALE', '-40%', 'ХИТ'];
-        const count = 30;
+    // Анимация листопада
+    function createLeaves() {
+        const container = document.getElementById('falling-leaves');
+        const items = ['🍁', '🍂', '🍃', '💰', '💳'];
+        const count = 20;
 
         for (let i = 0; i < count; i++) {
             const el = document.createElement('div');
-            const isLeaf = Math.random() > 0.5;
+            el.classList.add('leaf');
+            el.textContent = items[Math.floor(Math.random() * items.length)];
             
-            el.classList.add('floating-item');
-            if (isLeaf) {
-                el.classList.add('leaf');
-                el.textContent = items[Math.floor(Math.random() * 3)];
-            } else {
-                el.textContent = items[Math.floor(Math.random() * 3) + 3];
-            }
-            
-            // Случайные параметры падения
             const left = Math.random() * 100;
-            const duration = 10 + Math.random() * 20; // 10-30 секунд
-            const delay = Math.random() * 15;
-            const size = isLeaf ? (16 + Math.random() * 20) : (12 + Math.random() * 10);
+            const duration = 15 + Math.random() * 20;
+            const delay = Math.random() * 20;
+            const size = 12 + Math.random() * 20;
 
             el.style.left = `${left}%`;
             el.style.animationDuration = `${duration}s`;
@@ -627,10 +687,36 @@
         }
     }
 
+    // Таймер на 14 часов с цикличным сбросом
+    function startTimer() {
+        let totalSeconds = 14 * 60 * 60; // 14 часов в секундах
+
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+
+        setInterval(() => {
+            if (totalSeconds <= 0) {
+                totalSeconds = 14 * 60 * 60; // Сброс обратно на 14 часов
+            }
+
+            totalSeconds--;
+
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+
+            hoursEl.textContent = String(h).padStart(2, '0');
+            minutesEl.textContent = String(m).padStart(2, '0');
+            secondsEl.textContent = String(s).padStart(2, '0');
+        }, 1000);
+    }
+
     // Запуск
     document.addEventListener('DOMContentLoaded', () => {
         render();
-        createAnimation();
+        createLeaves();
+        startTimer();
     });
 </script>
 </body>
